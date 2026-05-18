@@ -1,0 +1,19 @@
+{
+  "name": "edmar",
+  "version": "1.0.0",
+  "main": "product.js",
+  "scripts": {
+    "start": "node product.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "mongoose": "^9.6.2"
+  }
+}

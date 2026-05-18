@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDMAR - Advanced Admin Panel</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; color: #333; }
+        .wrapper { max-width: 1100px; margin: 0 auto; }
+        h1 { text-align: center; margin-bottom: 30px; color: #111; }
+        .grid-forms { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        h3 { border-bottom: 2px solid #25D366; padding-bottom: 8px; margin-bottom: 15px; }
+        label { font-weight: bold; display: block; margin-top: 12px; font-size: 0.9rem; }
+        input, textarea, button { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        button { background: #25D366; color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        button:hover { background: #21b855; }
+        .btn-danger { background: #e74c3c; }
+        .btn-danger:hover { background: #c0392b; }
+        
+        /* Display Sections */
+        .manage-section { margin-top: 30px; background: white; padding: 20px; border-radius: 12px; }
+        .list-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; margin-top: 15px; }
+        .item-box { border: 1px solid #ddd; padding: 10px; border-radius: 8px; text-align: center; background: #fafafa; }
+        .item-box img { width: 100%; height: 110px; object-fit: cover; border-radius: 4px; }
+        .item-box div { font-size: 0.85rem; font-weight: bold; margin: 5px 0; }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <h1>EDMARSHOES - Dashboard ya Usimamizi</h1>
+    
+    <div class="grid-forms">
+        
+        <div class="card">
+            <h3>1. Weka Bidhaa Mpya</h3>
+            <form action="/api/products" method="POST">
+                <label>Jina la Kiatu:</label>
+                <input type="text" name="title" required placeholder="Nike Air Force">
+                <label>Link ya Picha:</label>
+                <input type="url" name="imageUrl" required placeholder="https://link-ya-picha.jpg">
+                <label>Bei (Tsh):</label>
+                <input type="text" name="price" required placeholder="45,000">
+                <label>Maelezo:</label>
+                <textarea name="description" rows="2" required placeholder="Size 40-44..."></textarea>
+                <button type="submit">Upload Bidhaa 🎉</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3>2. Ongeza Picha ya Slider (Juu)</h3>
+            <form action="/api/slider" method="POST">
+                <label>Link ya Picha ya Slider:</label>
+                <input type="url" name="imageUrl" required placeholder="https://link-ya-picha-slider.jpg">
+                <button type="submit">Ongeza Kwenye Slider 🖼️</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3>3. Muonekano (Background & Marquee)</h3>
+            
+            <form action="/api/settings" method="POST" style="margin-bottom: 15px;">
+                <input type="hidden" name="key" value="bg_image">
+                <label>Link ya Picha ya Nyuma (Background Image):</label>
+                <input type="url" name="value" required placeholder="https://link-ya-bg.jpg">
+                <button type="submit">Set Background Image 🌆</button>
+            </form>
+            <button class="btn-danger" onclick="futaSetting('bg_image')">Futa Background yote 🗑️</button>
+
+            <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
+
+            <form action="/api/settings" method="POST">
+                <input type="hidden" name="key" value="marquee_text">
+                <label>Maneno ya Tangazo Linalotembea (Marquee):</label>
+                <input type="text" name="value" required placeholder="Ofa ya msimu wa sikukuu ipo tayari wahi sasa...">
+                <button type="submit">Weka Marquee 💬</button>
+            </form>
+            <button class="btn-danger" onclick="futaSetting('marquee_text')">Futa Marquee Text 🗑️</button>
+        </div>
+
+    </div>
+
+    <div class="manage-section">
+        <h3>Dhibiti Viatu Vilivyopo</h3>
+        <div class="list-grid" id="products-list"></div>
+    </div>
+
+    <div class="manage-section">
+        <h3>Dhibiti Picha za Slider Vilivyopo</h3>
+        <div class="list-grid" id="slider-list"></div>
+    </div>
+
+</div>
+
+<script>
+    async function pakiaDataAdmin() {
+        try {
+            // 1. Leta na Onyesha Viatu kwa ajili ya Kufuta
+            const resProd = await fetch('/api/products');
+            const products = await resProd.json();
+            const pList = document.getElementById('products-list');
+            pList.innerHTML = products.length === 0 ? '<p>Hakuna viatu.</p>' : '';
+            products.forEach(p => {
+                pList.insertAdjacentHTML('beforeend', `
+                    <div class="item-box">
+                        <img src="${p.imageUrl}">
+                        <div>${p.title}</div>
+                        <button class="btn-danger" style="padding:5px; font-size:12px; margin-top:5px;" onclick="futaBidhaa('${p._id}')">Futa</button>
+                    </div>
+                `);
+            });
+
+            // 2. Leta na Onyesha Slider Images kwa ajili ya Kufuta
+            const resSlide = await fetch('/api/slider');
+            const slides = await resSlide.json();
+            const sList = document.getElementById('slider-list');
+            sList.innerHTML = slides.length === 0 ? '<p>Hakuna picha za slider.</p>' : '';
+            slides.forEach((s, idx) => {
+                sList.insertAdjacentHTML('beforeend', `
+                    <div class="item-box">
+                        <img src="${s.imageUrl}">
+                        <div>Slide #${idx+1}</div>
+                        <button class="btn-danger" style="padding:5px; font-size:12px; margin-top:5px;" onclick="futaSlider('${s._id}')">Futa</button>
+                    </div>
+                `);
+            });
+
+        } catch (err) { console.error(err); }
+    }
+
+    async function futaBidhaa(id) {
+        if(confirm("Futa kiatu hiki?")) {
+            const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+            const d = await res.json(); if(d.success) pakiaDataAdmin();
+        }
+    }
+
+    async function futaSlider(id) {
+        if(confirm("Futa picha hii ya slider?")) {
+            const res = await fetch(`/api/slider/${id}`, { method: 'DELETE' });
+            const d = await res.json(); if(d.success) pakiaDataAdmin();
+        }
+    }
+
+    async function futaSetting(key) {
+        if(confirm(`Je, una uhakika unataka kuondoa/kufuta mpangilio huu wa ${key}?`)) {
+            const res = await fetch(`/api/settings/${key}`, { method: 'DELETE' });
+            const d = await res.json();
+            if(d.success) { alert(d.message); window.location.reload(); }
+        }
+    }
+
+    window.onload = pakiaDataAdmin;
+</script>
+</body>
+</html>
