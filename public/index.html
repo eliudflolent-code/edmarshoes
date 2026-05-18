@@ -6,235 +6,62 @@
     <title>EDMARSHOES - Home</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        
-        /* BACKGROUND IMAGE KUU INAYOWEKWA NA ADMIN */
-        body { 
-            background-color: #f9f9f9; 
-            background-attachment: fixed;
-            background-position: center;
-            background-size: cover;
-            color: #333; 
-            display: flex; 
-            flex-direction: column; 
-            min-height: 100vh; 
-        }
-
-        header { background-color: rgba(255, 255, 255, 0.95); box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        body { background-color: #f9f9f9; background-attachment: fixed; background-position: center; background-size: cover; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: rgba(255, 255, 255, 0.95); box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
         .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; }
         .logo { font-size: 1.6rem; font-weight: 800; color: #111; }
         .logo span { color: #25D366; }
-        .nav-links { display: flex; list-style: none; gap: 25px; }
-        .nav-links a { text-decoration: none; color: #555; font-weight: 600; }
-
-        /* DYNAMIC MARQUEE CHINI YA HEADER */
-        .marquee-container { background: #111; color: #25D366; padding: 8px 0; font-weight: bold; font-size: 0.95rem; overflow: hidden; }
-
-        /* HERO SLIDER (PICHA ZINAZOSLIDE KUTOKA KWA ADMIN) */
-        .hero-slider {
-            width: 100%; height: 400px;
-            background-color: #222;
-            position: relative; overflow: hidden;
-            display: flex; align-items: center; justify-content: center; color: white; text-align: center;
-        }
-        .slide-img {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; opacity: 0; transition: opacity 1s ease-in-out; z-index: 1;
-        }
+        .marquee-container { background: #111; color: #25D366; padding: 8px 0; font-weight: bold; overflow: hidden; }
+        .hero-slider { width: 100%; height: 400px; background-color: #222; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; color: white; }
+        .slide-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s; z-index: 1; }
         .slide-img.active { opacity: 0.6; z-index: 2; }
-        .hero-content { position: relative; z-index: 10; padding: 0 20px; }
-        .hero-content h1 { font-size: 3rem; text-transform: uppercase; text-shadow: 2px 2px 10px rgba(0,0,0,0.8); }
-
-        /* MAIN NA FOOTER (ZInakuwa na background ya transparent kidogo ili picha ya nyuma ionekane) */
-        main { flex: 1; max-width: 1200px; margin: 30px auto; width: 100%; padding: 20px; background: rgba(255, 255, 255, 0.92); border-radius: 16px; box-shadow: 0 4px 30px rgba(0,0,0,0.05); backdrop-filter: blur(5px); }
-        
-        .why-us { margin-bottom: 50px; text-align: center; padding-top: 20px; }
-        .why-us h2 { font-size: 1.8rem; margin-bottom: 25px; }
-        .why-us-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .why-card { padding: 25px; border-radius: 12px; background: white; border: 1px solid #eee; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
-        .why-card h3 { color: #25D366; margin-bottom: 12px; }
-
-        .section-title { text-align: center; margin-bottom: 30px; font-size: 1.8rem; }
+        .hero-content { position: relative; z-index: 10; text-align: center; }
+        .hero-content h1 { font-size: 3rem; text-shadow: 2px 2px 10px rgba(0,0,0,0.8); }
+        main { flex: 1; max-width: 1200px; margin: 30px auto; width: 100%; padding: 20px; background: rgba(255, 255, 255, 0.92); border-radius: 16px; box-shadow: 0 4px 30px rgba(0,0,0,0.05); }
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-
-        /* PRODUCT CARD MADOIDO */
-        .product-card {
-            background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid #eee; display: flex; flex-direction: column; justify-content: space-between;
-        }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .product-image-container { width: 100%; height: 200px; overflow: hidden; background: #f0f0f0; position: relative; }
+        .product-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #eee; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-image-container { width: 100%; height: 200px; overflow: hidden; }
         .product-card img { width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; }
-        
-        .product-info { padding: 15px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; }
-        .product-name { font-size: 1.05rem; font-weight: 600; margin-bottom: 5px; }
-        .product-desc { font-size: 0.85rem; color: #666; margin-bottom: 10px; }
-        .product-price { color: #e67e22; font-weight: bold; font-size: 1.15rem; margin-bottom: 12px; }
-        
-        .whatsapp-btn {
-            display: flex; align-items: center; justify-content: center; background: #25D366; color: white;
-            text-decoration: none; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 0.9rem;
-        }
-
-        footer { background: rgba(17, 17, 17, 0.95); color: #aaa; padding: 30px 20px; text-align: center; font-size: 0.9rem; margin-top: auto; backdrop-filter: blur(5px); }
-        footer span { color: #25D366; font-weight: bold; }
-
-        /* GOOGLE LIGHTBOX MODAL (PICHA NDANI YA PICHA POPUP) */
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.9); z-index: 2000; align-items: center; justify-content: center;
-        }
-        .modal-content { max-width: 85%; max-height: 80%; border-radius: 8px; box-shadow: 0 4px 20px rgba(255,255,255,0.1); object-fit: contain; }
-        .close-modal { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; font-weight: bold; cursor: pointer; }
+        .product-info { padding: 15px; }
+        .product-name { font-size: 1.05rem; font-weight: 600; }
+        .product-price { color: #e67e22; font-weight: bold; font-size: 1.15rem; margin: 8px 0; }
+        .whatsapp-btn { display: block; background: #25D366; color: white; text-decoration: none; padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; }
+        footer { background: rgba(17, 17, 17, 0.95); color: #aaa; padding: 20px; text-align: center; margin-top: auto; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-content { max-width: 85%; max-height: 80%; border-radius: 8px; object-fit: contain; }
+        .close-modal { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; }
     </style>
 </head>
 <body>
-
-    <header>
-        <nav class="nav-container">
-            <div class="logo">EDMAR<span>SHOES</span></div>
-            <ul class="nav-links">
-                <li><a href="#">Home</a></li>
-                <li><a href="#why-us">Why Us</a></li>
-                <li><a href="#bidhaa">Bidhaa</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <div class="marquee-container" id="marquee-box" style="display:none;">
-        <marquee behavior="scroll" direction="left" id="marquee-text">Karibu EDMARSHOES...</marquee>
-    </div>
-
-    <section class="hero-slider" id="slider-container">
-        <div class="hero-content">
-            <h1>EDMARSHOES</h1>
-            <p>Viatu vya Kisasa kwa Wageni na Wenyeji</p>
-        </div>
-    </section>
-
-    <main>
-        <section id="why-us" class="why-us" style="display: none;">
-            <h2 id="why-us-title">Kwanini Utuchague Sisi?</h2>
-            <div class="why-us-grid" id="why-us-container"></div>
-        </section>
-
-        <section id="bidhaa">
-            <h2 class="section-title">Bidhaa Zetu Mpya</h2>
-            <div class="products-grid" id="products-container"></div>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2026 <span>EDMARSHOES</span>. Haki zote zimehifadhiwa.</p>
-        <p>Mawasiliano: 0616807103 | Tanzania</p>
-    </footer>
-
-    <div id="imageModal" class="modal">
-        <span class="close-modal" onclick="fungaPicha()">&times;</span>
-        <img class="modal-content" id="imgPopup">
-    </div>
-
+    <header><nav class="nav-container"><div class="logo">EDMAR<span>SHOES</span></div></nav></header>
+    <div class="marquee-container" id="marquee-box" style="display:none;"><marquee id="marquee-text">Karibu EDMARSHOES...</marquee></div>
+    <section class="hero-slider" id="slider-container"><div class="hero-content"><h1>EDMARSHOES</h1><p>Viatu vya Kisasa</p></div></section>
+    <main><h2 style="text-align:center;margin-bottom:20px;">Bidhaa Zetu Mpya</h2><div class="products-grid" id="products-container"></div></main>
+    <footer><p>&copy; 2026 EDMARSHOES. Mawasiliano: 0616807103</p></footer>
+    <div id="imageModal" class="modal"><span class="close-modal" onclick="document.getElementById('imageModal').style.display='none'">&times;</span><img class="modal-content" id="imgPopup"></div>
     <script>
-        // Fungua picha kubwa (Google Lightbox Style)
-        function funguaPicha(src) {
-            const modal = document.getElementById("imageModal");
-            const modalImg = document.getElementById("imgPopup");
-            modal.style.display = "flex";
-            modalImg.src = src;
+        function funguaPicha(src) { document.getElementById("imageModal").style.display = "flex"; document.getElementById("imgPopup").src = src; }
+        async function pakia() {
+            const resSettings = await fetch('/api/settings'); const settings = await resSettings.json();
+            if(settings.bg_image) document.body.style.backgroundImage = `url('${settings.bg_image}')`;
+            if(settings.marquee_text) { document.getElementById('marquee-text').innerText = settings.marquee_text; document.getElementById('marquee-box').style.display = 'block'; }
+            const resSlider = await fetch('/api/slider'); const slides = await resSlider.json();
+            const sliderContainer = document.getElementById('slider-container');
+            slides.forEach((slide, index) => { sliderContainer.insertAdjacentHTML('afterbegin', `<img src="${slide.imageUrl}" class="slide-img ${index === 0 ? 'active' : ''}">`); });
+            if(slides.length > 1) { let c = 0; setInterval(() => { const s = document.querySelectorAll('.slide-img'); s[c].classList.remove('active'); c = (c + 1) % s.length; s[c].classList.add('active'); }, 4000); }
+            const resProd = await fetch('/api/products'); const products = await resProd.json();
+            const pCont = document.getElementById('products-container');
+            products.forEach(item => {
+                const ujumbe = encodeURIComponent(`Habari EDMARSHOES, nahitaji kuagiza: ${item.title}\nBei: Tsh ${item.price}`);
+                pCont.insertAdjacentHTML('beforeend', `
+                    <div class="product-card">
+                        <div class="product-image-container"><img src="${item.imageUrl}" onclick="funguaPicha('${item.imageUrl}')"></div>
+                        <div class="product-info"><div class="product-name">${item.title}</div><div class="product-price">Tsh ${item.price}</div>
+                        <a href="https://wa.me/255616807103?text=${ujumbe}" target="_blank" class="whatsapp-btn">Agiza WhatsApp 💬</a></div>
+                    </div>`);
+            });
         }
-        function fungaPicha() {
-            document.getElementById("imageModal").style.display = "none";
-        }
-
-        async function pakiaMfumoKamilifu() {
-            try {
-                // 1. VUTA SETTINGS (Background, Marquee, Why Us)
-                const resSettings = await fetch('/api/settings');
-                const settings = await resSettings.json();
-
-                // Weka background image kuu ya duka
-                if(settings.bg_image) {
-                    document.body.style.backgroundImage = `url('${settings.bg_image}')`;
-                }
-                // Weka Marquee Text
-                if(settings.marquee_text) {
-                    document.getElementById('marquee-text').innerText = settings.marquee_text;
-                    document.getElementById('marquee-box').style.display = 'block';
-                }
-                // Weka Why Us Cards
-                if(settings.why_us_list && settings.why_us_list.length > 0) {
-                    const whyContainer = document.getElementById('why-us-container');
-                    whyContainer.innerHTML = '';
-                    settings.why_us_list.forEach(w => {
-                        whyContainer.insertAdjacentHTML('beforeend', `
-                            <div class="why-card">
-                                <h3>${w.title}</h3>
-                                <p>${w.desc}</p>
-                            </div>
-                        `);
-                    });
-                    document.getElementById('why-us').style.display = 'block';
-                }
-
-                // 2. VUTA PICHA ZA SLIDER
-                const resSlider = await fetch('/api/slider');
-                const slides = await resSlider.json();
-                const sliderContainer = document.getElementById('slider-container');
-                
-                slides.forEach((slide, index) => {
-                    sliderContainer.insertAdjacentHTML('afterbegin', `
-                        <img src="${slide.imageUrl}" class="slide-img ${index === 0 ? 'active' : ''}" alt="Slide">
-                    `);
-                });
-                
-                // Anzisha mzunguko wa slider (kila baada ya sekunde 4)
-                if(slides.length > 1) {
-                    let currentSlide = 0;
-                    setInterval(() => {
-                        const allSlides = document.querySelectorAll('.slide-img');
-                        allSlides[currentSlide].classList.remove('active');
-                        currentSlide = (currentSlide + 1) % allSlides.length;
-                        allSlides[currentSlide].classList.add('active');
-                    }, 4000);
-                }
-
-                // 3. VUTA BIDHAA (PRODUCTS)
-                const resProducts = await fetch('/api/products');
-                const products = await resProducts.json();
-                const prodContainer = document.getElementById('products-container');
-                prodContainer.innerHTML = '';
-
-                if(products.length === 0) {
-                    prodContainer.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:#888;">Bado hakuna viatu vipya.</p>';
-                }
-
-                products.forEach(item => {
-                    const nambaWhastapp = "255616807103"; // Namba yako mpya 0616807103
-                    const ujumbe = encodeURIComponent(`Habari EDMARSHOES, nahitaji kuagiza viatu hivi:\n\n*Jina:* ${item.title}\n*Bei:* Tsh ${item.price}\n*Maelezo:* ${item.description}`);
-                    const whatsappLink = `https://wa.me/${nambaWhastapp}?text=${ujumbe}`;
-
-                    prodContainer.insertAdjacentHTML('beforeend', `
-                        <div class="product-card">
-                            <div class="product-image-container">
-                                <img src="${item.imageUrl}" alt="${item.title}" onclick="funguaPicha('${item.imageUrl}')" onerror="this.src='https://placehold.co/400x400?text=Picha+Haipo'">
-                            </div>
-                            <div class="product-info">
-                                <div>
-                                    <div class="product-name">${item.title}</div>
-                                    <div class="product-desc">${item.description}</div>
-                                </div>
-                                <div>
-                                    <div class="product-price">Tsh ${item.price}</div>
-                                    <a href="${whatsappLink}" target="_blank" class="whatsapp-btn">Agiza kwa WhatsApp 💬</a>
-                                </div>
-                            </div>
-                        </div>
-                    `);
-                });
-
-            } catch (err) { console.error("Kosa la kupakia data:", err); }
-        }
-
-        window.onload = pakiaMfumoKamilifu;
+        window.onload = pakia;
     </script>
 </body>
 </html>
