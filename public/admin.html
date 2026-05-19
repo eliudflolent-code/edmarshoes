@@ -7,18 +7,18 @@
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
         .dashboard { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        h1 { color: #111; border-bottom: 3px solid #25D366; padding-bottom: 10px; display: flex; justify-content: space-between; }
+        h1 { color: #111; border-bottom: 3px solid #25D366; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         h3 { color: #2c3e50; margin-top: 25px; background: #e8f8f5; padding: 10px; border-radius: 6px; }
         .box { margin-bottom: 15px; }
         label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; }
         input, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
         button { background: #25D366; color: white; border: none; padding: 12px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 5px; font-size: 1rem; }
         button:hover { background: #1ebd51; }
-        .logout-btn { background: #ff3b30; font-size: 0.9rem; padding: 5px 10px; width: auto; }
+        .logout-btn { background: #ff3b30; font-size: 0.9rem; padding: 8px 15px; width: auto; margin-top: 0; }
         .list-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         .list-table th, .list-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
         .list-table th { background: #f8f9fa; }
-        .del-btn { background: #ff3b30; padding: 6px 12px; font-size: 0.85rem; width: auto; }
+        .del-btn { background: #ff3b30; padding: 6px 12px; font-size: 0.85rem; width: auto; margin-top: 0; }
     </style>
 </head>
 <body>
@@ -50,7 +50,7 @@
             <input type="text" id="slideUrl" placeholder="https://i.postimg.cc/...">
         </div>
         <button onclick="ongezaSlide()" style="background: #3498db;">Weka Kwenye Slide 🖼️</button>
-        <button onclick="futaSlides zote()" style="background: #e74c3c; margin-top: 8px;">Futa Picha Zote za Slide Tuanze Upya</button>
+        <button onclick="futaSlidesZote()" style="background: #e74c3c; margin-top: 8px;">Futa Picha Zote za Slide Tuanze Upya</button>
 
         <h3>3. Badilisha Picha ya Background (Duka Zima)</h3>
         <div class="box">
@@ -76,13 +76,6 @@
     </div>
 
     <script>
-        // Linda Dashboard isifunguke kama hujalogin
-        async function kaguaUlinzi() {
-            const res = await fetch('/api/admin/check');
-            const data = await res.json();
-            if(!data.loggedIn) window.location.href = '/login.html';
-        }
-
         async function ongezaKiatu() {
             const data = {
                 name: document.getElementById('pName').value,
@@ -97,7 +90,10 @@
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)
             });
-            if(res.ok) { alert('Kiatu kimeongezwa!'); location.reload(); }
+            if(res.ok) { 
+                alert('Kiatu kimeongezwa vizuri sana! 🎉'); 
+                location.reload(); 
+            }
         }
 
         async function ongezaSlide() {
@@ -108,10 +104,13 @@
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ key: 'slideshow', value })
             });
-            if(res.ok) { alert('Picha imeongezwa kwenye slide!'); document.getElementById('slideUrl').value = ''; }
+            if(res.ok) { 
+                alert('Picha imeongezwa kwenye slide kwa mafanikio! 🖼️'); 
+                document.getElementById('slideUrl').value = ''; 
+            }
         }
 
-        async function futaSlideszote() {
+        async function futaSlidesZote() {
             if(confirm('Je, unataka kufuta picha zote za slide zilizopo?')) {
                 await fetch('/api/design/slideshow/clear', { method: 'POST' });
                 alert('Slide zote zimefutwa!');
@@ -126,7 +125,7 @@
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ key: 'background', value })
             });
-            if(res.ok) alert('Background imehifadhiwa!');
+            if(res.ok) alert('Background mpya imehifadhiwa! 🎨');
         }
 
         async function badilishaMarquee() {
@@ -137,21 +136,25 @@
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ key: 'marquee', value })
             });
-            if(res.ok) alert('Tangazo limebadilishwa kikamilifu!');
+            if(res.ok) alert('Tangazo limebadilishwa kikamilifu! 📢');
         }
 
         async function pakiaViatu() {
-            const res = await fetch('/api/products');
-            const viatu = await res.json();
-            const tbody = document.getElementById('orodhaKuu');
-            tbody.innerHTML = viatu.map(v => `
-                <tr>
-                    <td><img src="${v.imageUrl}" width="60" height="60" style="object-fit:cover; border-radius:6px;"></td>
-                    <td><b>${v.name}</b><br><small style="color:#666">${v.description || ''}</small></td>
-                    <td>Tsh ${v.price}/=</td>
-                    <td><button class="del-btn" onclick="futaBidhaa('${v._id}')">Futa</button></td>
-                </tr>
-            `).join('');
+            try {
+                const res = await fetch('/api/products');
+                const viatu = await res.json();
+                const tbody = document.getElementById('orodhaKuu');
+                tbody.innerHTML = viatu.map(v => `
+                    <tr>
+                        <td><img src="${v.imageUrl}" width="60" height="60" style="object-fit:cover; border-radius:6px;"></td>
+                        <td><b>${v.name}</b><br><small style="color:#666">${v.description || ''}</small></td>
+                        <td>Tsh ${v.price}/=</td>
+                        <td><button class="del-btn" onclick="futaBidhaa('${v._id}')">Futa</button></td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                console.log("Shida ya kupakia viatu vya duka.");
+            }
         }
 
         async function futaBidhaa(id) {
@@ -161,7 +164,6 @@
             }
         }
 
-        kaguaUlinzi();
         pakiaViatu();
     </script>
 </body>
