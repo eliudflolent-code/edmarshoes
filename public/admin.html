@@ -2,44 +2,38 @@
 <html lang="sw">
 <head>
     <meta charset="UTF-8">
-    <title>Edmar Admin - Control Panel</title>
+    <title>Admin - EdmarShoes</title>
     <style>
         body { background: #000; color: white; padding: 20px; font-family: sans-serif; }
         .box { background: #1a1a1a; padding: 20px; border-radius: 20px; margin-bottom: 20px; border: 1px solid #333; }
         input { width: 100%; padding: 10px; margin: 5px 0; border-radius: 10px; border: none; }
         button { background: #25D366; padding: 10px; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; width: 100%; margin-top: 5px; }
-        .del { background: #ff3b30; }
     </style>
 </head>
 <body>
     <div class="box">
-        <h3>Settings (BG & Marquee)</h3>
+        <h3>Settings (Promo 4 + Background)</h3>
         <input type="text" id="bg" placeholder="URL ya Background Image">
         <input type="text" id="mq" placeholder="Maneno ya Marquee">
         <input type="text" id="p1" placeholder="Promo 1">
         <input type="text" id="p2" placeholder="Promo 2">
         <input type="text" id="p3" placeholder="Promo 3">
+        <input type="text" id="p4" placeholder="Promo 4">
         <button onclick="saveSettings()">Hifadhi Settings</button>
     </div>
-    <div class="box" id="slideBox"><h3>Slideshow</h3><input type="text" id="sUrl" placeholder="Link ya Picha"><button onclick="addSlide()">Ongeza Slide</button><div id="slideList"></div></div>
-    <div class="box" id="prodBox"><h3>Bidhaa</h3><input type="text" id="pName" placeholder="Jina"><input type="text" id="pPrice" placeholder="Bei"><input type="text" id="pUrl" placeholder="Link ya Picha"><button onclick="addProduct()">Ongeza Kiatu</button><div id="prodList"></div></div>
-    
     <script>
-        async function load() {
-            const [s, sl, p] = await Promise.all([fetch('/api/settings').then(r=>r.json()), fetch('/api/slides').then(r=>r.json()), fetch('/api/products').then(r=>r.json())]);
-            document.getElementById('bg').value = s.bgImage || '';
-            document.getElementById('mq').value = s.marquee || '';
-            document.getElementById('p1').value = s.promo1 || '';
-            document.getElementById('p2').value = s.promo2 || '';
-            document.getElementById('p3').value = s.promo3 || '';
-            document.getElementById('slideList').innerHTML = sl.map(i => `<div>${i.imageUrl} <button class="del" onclick="del('/api/slides/${i._id}')">Futa</button></div>`).join('');
-            document.getElementById('prodList').innerHTML = p.map(i => `<div>${i.name} <button class="del" onclick="del('/api/products/${i._id}')">Futa</button></div>`).join('');
+        async function saveSettings() {
+            const d = {
+                bgImage:document.getElementById('bg').value, 
+                marquee:document.getElementById('mq').value, 
+                promo1:document.getElementById('p1').value, 
+                promo2:document.getElementById('p2').value, 
+                promo3:document.getElementById('p3').value,
+                promo4:document.getElementById('p4').value
+            };
+            await fetch('/api/admin/settings', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(d)});
+            alert('Settings zimehifadhiwa!');
         }
-        async function saveSettings() { const d = {bgImage:document.getElementById('bg').value, marquee:document.getElementById('mq').value, promo1:document.getElementById('p1').value, promo2:document.getElementById('p2').value, promo3:document.getElementById('p3').value}; await fetch('/api/admin/settings', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(d)}); alert('Saved!'); }
-        async function addSlide() { await fetch('/api/slides', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({imageUrl: document.getElementById('sUrl').value})}); load(); }
-        async function addProduct() { await fetch('/api/products', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name:document.getElementById('pName').value, price:document.getElementById('pPrice').value, imageUrl:document.getElementById('pUrl').value})}); load(); }
-        async function del(url) { await fetch(url, {method:'DELETE'}); load(); }
-        load();
     </script>
 </body>
 </html>
