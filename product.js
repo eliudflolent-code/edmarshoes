@@ -8,8 +8,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static('public'));
 
-// Unganisha MongoDB
-mongoose.connect(process.env.MONGO_URI)
+// WEKA LINK YAKO HALISI YA MONGODB HAPA ILI ISITEGEMEE RENDER ENVIRONMENT VARIABLES
+const MONGO_URI = "mongodb+srv://eliudflolent_db_user:yMGkdJQ6FQfnrKdI@cluster0.wzwtfbe.mongodb.net/?appName=Cluster0";
+
+mongoose.connect(MONGO_URI)
     .then(() => console.log("Database ya EDMAR Imeunganishwa Kikamilifu! 🔥"))
     .catch(err => console.error("Shida ya DB:", err));
 
@@ -27,7 +29,6 @@ const DesignSchema = new mongoose.Schema({
 const Product = mongoose.model('Product', ProductSchema);
 const Design = mongoose.model('Design', DesignSchema);
 
-// Admin Login Route (Rahisi na ya Uhakika)
 app.post('/api/admin/login', (req, res) => {
     if (req.body.password === 'Edmar2026') {
         res.json({ success: true });
@@ -36,7 +37,6 @@ app.post('/api/admin/login', (req, res) => {
     }
 });
 
-// --- API za Viatu (Ziko wazi sasa hivi ili data ipite bila kizuizi) ---
 app.post('/api/products', async (req, res) => {
     try {
         const newProduct = new Product(req.body);
@@ -48,8 +48,12 @@ app.post('/api/products', async (req, res) => {
 });
 
 app.get('/api/products', async (req, res) => {
-    const products = await Product.find();
-    res.json(products);
+    try {
+        const products = await Product.find();
+        res.json(products);
+    } catch (err) {
+        res.status(500).json([]);
+    }
 });
 
 app.delete('/api/products/:id', async (req, res) => {
@@ -57,15 +61,18 @@ app.delete('/api/products/:id', async (req, res) => {
     res.json({ success: true });
 });
 
-// --- API za Muonekano ---
 app.post('/api/design', async (req, res) => {
-    const { key, value } = req.body;
-    if (key === 'slideshow') {
-        await Design.findOneAndUpdate({ key }, { $push: { valueList: value } }, { upsert: true });
-    } else {
-        await Design.findOneAndUpdate({ key }, { value }, { upsert: true });
+    try {
+        const { key, value } = req.body;
+        if (key === 'slideshow') {
+            await Design.findOneAndUpdate({ key }, { $push: { valueList: value } }, { upsert: true });
+        } else {
+            await Design.findOneAndUpdate({ key }, { value }, { upsert: true });
+        }
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
-    res.json({ success: true });
 });
 
 app.post('/api/design/slideshow/clear', async (req, res) => {
