@@ -2,130 +2,32 @@
 <html lang="sw">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EDMAR ADMIN - MongoDB Panel</title>
+    <title>Admin Panel</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f6f9; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 700px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-        h2 { border-bottom: 3px solid #25D366; padding-bottom: 10px; color: #111; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; }
-        input, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
-        button { background: #25D366; color: black; border: none; padding: 14px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; font-size: 1.1rem; transition: 0.2s; }
-        button:hover { background: #1ebd51; }
-        .product-list { margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; }
-        .item-row { display: flex; align-items: center; justify-content: space-between; background: #fafafa; padding: 10px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #eee; }
-        .item-row img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; }
-        .del-btn { background: #ff3b30; color: white; width: auto; padding: 6px 12px; font-size: 0.9rem; margin-top: 0; }
+        body { background: #000; color: white; font-family: sans-serif; padding: 20px; }
+        .box { background: #111; padding: 25px; border-radius: 30px; max-width: 500px; margin: auto; border: 1px solid #444; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 15px; border: none; box-sizing: border-box; }
+        button { background: #25D366; padding: 12px; border-radius: 15px; border: none; width: 100%; cursor: pointer; font-weight: bold; }
+        .logout { background: #ff3b30; color: white; margin-top: 10px; }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <h2>EDMAR SHOES - Dashboard (Mawingu Cloud ☁️)</h2>
-    <p style="color: #666; font-size: 0.9rem;">Data zote hapa zinasaveka MongoDB Atlas. Hazitafutika kamwe!</p>
-    
-    <div class="form-group">
-        <label>Jina la Kiatu:</label>
-        <input type="text" id="pName" placeholder="Mfano: Nike Airforce 1">
+    <div class="box">
+        <h2>Admin Dashboard</h2>
+        <input type="text" id="name" placeholder="Jina la kiatu">
+        <input type="text" id="price" placeholder="Bei">
+        <textarea id="desc" placeholder="Maelezo"></textarea>
+        <input type="text" id="url" placeholder="Direct Link ya Picha">
+        <button onclick="add()">Hifadhi Bidhaa</button>
+        <button class="logout" onclick="logout()">Logout</button>
     </div>
-    
-    <div class="form-group">
-        <label>Bei ya Kiatu (Tsh):</label>
-        <input type="text" id="pPrice" placeholder="Mfano: 45,000">
-    </div>
-    
-    <div class="form-group">
-        <label>Maelezo Mafupi (Description):</label>
-        <textarea id="pDesc" rows="2" placeholder="Sifa za kiatu hiki..."></textarea>
-    </div>
-    
-    <div class="form-group">
-        <label>Direct Link ya Picha kutoka Postimages:</label>
-        <input type="text" id="pUrl" placeholder="https://i.postimg.cc/...">
-    </div>
-    
-    <button type="button" onclick="pandishaMzigo()">Hifadhi Kiatu Permanent 🚀</button>
-
-    <div class="product-list">
-        <h3>Viatu Vilivyopo Kwenye Database</h3>
-        <div id="orodhaKuu">Inapakia kutoka MongoDB...</div>
-    </div>
-</div>
-
-<script>
-    async function pandishaMzigo() {
-        const name = document.getElementById('pName').value.trim();
-        const price = document.getElementById('pPrice').value.trim();
-        const description = document.getElementById('pDesc').value.trim();
-        const imageUrl = document.getElementById('pUrl').value.trim();
-
-        if (!name || !imageUrl) {
-            alert('Tafadhali jaza Jina la kiatu na u-paste Link ya Picha ya Postimages!');
-            return;
+    <script>
+        async function add() {
+            const p = { name: document.getElementById('name').value, price: document.getElementById('price').value, description: document.getElementById('desc').value, imageUrl: document.getElementById('url').value };
+            await fetch('/api/products', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(p) });
+            alert('Imepanda!'); location.reload();
         }
-
-        try {
-            const response = await fetch('/api/products', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, price, description, imageUrl })
-            });
-
-            const data = await response.json();
-
-            if (response.ok && data.success) {
-                alert('Hongera sana kaka! Mzigo umehifadhiwa MongoDB salama! 🔒✨');
-                document.getElementById('pName').value = '';
-                document.getElementById('pPrice').value = '';
-                document.getElementById('pDesc').value = '';
-                document.getElementById('pUrl').value = '';
-                pakiaViatuVyetu();
-            } else {
-                alert('MongoDB Imekataa: ' + (data.error || 'Shida haijulikani'));
-            }
-        } catch (error) {
-            alert('Kosa la Mawasiliano: Kushindwa kufika kwenye server!');
-        }
-    }
-
-    async function pakiaViatuVyetu() {
-        try {
-            const res = await fetch('/api/products');
-            const viatu = await res.json();
-            const div = document.getElementById('orodhaKuu');
-            
-            if(viatu.length === 0) {
-                div.innerHTML = '<p style="color:#999">Bado duka lipo tupu kule MongoDB.</p>';
-                return;
-            }
-
-            div.innerHTML = viatu.map(v => `
-                <div class="item-row">
-                    <img src="${v.imageUrl}" onerror="this.src='https://via.placeholder.com/60'">
-                    <div>
-                        <strong>${v.name}</strong><br>
-                        <small style="color:#777">Tsh ${v.price}/=</small>
-                    </div>
-                    <button class="del-btn" onclick="futaKiatu('${v._id}')">Futa</button>
-                </div>
-            `).join('');
-        } catch(e) {
-            document.getElementById('orodhaKuu').innerText = 'Imefeli kupakia kutoka MongoDB.';
-        }
-    }
-
-    async function futaKiatu(id) {
-        if (confirm('Je, unataka kufuta kabisa kiatu hiki kule MongoDB?')) {
-            const res = await fetch('/api/products/' + id, { method: 'DELETE' });
-            if(res.ok) {
-                alert('Kimefutwa kwenye Database!');
-                pakiaViatuVyetu();
-            }
-        }
-    }
-
-    pakiaViatuVyetu();
-</script>
+        async function logout() { await fetch('/api/admin/logout'); location.href='/'; }
+    </script>
 </body>
 </html>

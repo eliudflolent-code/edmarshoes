@@ -3,83 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EDMAR SHOES - Duka la Viatu Vikali</title>
+    <title>EDMARSHOES | Duka la Viatu</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #111; color: white; margin: 0; padding: 0; }
-        .header { background: #222; padding: 20px; text-align: center; border-bottom: 3px solid #25D366; }
-        .header h1 { margin: 0; color: #25D366; font-size: 2.5rem; }
-        .header p { margin: 5px 0 0 0; color: #aaa; font-style: italic; }
-        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .card { background: #222; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.5); border: 1px solid #333; transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); border-color: #25D366; }
-        .card img { width: 100%; height: 280px; object-fit: cover; }
-        .card-body { padding: 20px; text-align: center; }
-        .card-body h3 { margin: 0 0 10px 0; font-size: 1.4rem; color: #fff; }
-        .card-body p { margin: 0 0 15px 0; color: #aaa; font-size: 0.9rem; height: 40px; overflow: hidden; }
-        .price { font-size: 1.3rem; font-weight: bold; color: #25D366; margin-bottom: 15px; }
-        .btn-whatsapp { display: inline-block; background: #25D366; color: black; text-decoration: none; padding: 12px 25px; font-weight: bold; border-radius: 8px; width: 80%; transition: 0.2s; }
-        .btn-whatsapp:hover { background: #1ebd51; }
-        .footer { background: #111; text-align: center; padding: 40px 20px; color: #555; font-size: 0.85rem; margin-top: 50px; }
-        .footer a { color: #333; text-decoration: none; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #000; color: #fff; background-image: url('https://i.postimg.cc/bg-image.jpg'); background-size: cover; background-attachment: fixed; }
+        .header { background: rgba(0,0,0,0.9); padding: 15px; border-bottom: 2px solid #25D366; }
+        .marquee { color: #25D366; font-weight: bold; margin-bottom: 10px; }
+        .nav { display: flex; gap: 20px; justify-content: center; }
+        .nav a { color: white; text-decoration: none; font-weight: bold; padding: 10px; border-radius: 15px; }
+        .nav a:hover { background: #25D366; color: black; }
+        .box { background: rgba(0,0,0,0.7); border-radius: 30px; padding: 25px; margin: 20px auto; max-width: 1000px; border: 1px solid #333; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .product-card { background: #111; border-radius: 25px; overflow: hidden; transition: 0.3s; border: 1px solid #444; }
+        .product-card:hover { transform: scale(1.03); border-color: #25D366; }
+        .product-card img { width: 100%; height: 220px; object-fit: cover; border-radius: 25px 25px 0 0; cursor: pointer; }
+        .btn-wa { display: block; background: #25D366; color: black; text-align: center; padding: 12px; margin: 15px; border-radius: 15px; font-weight: bold; text-decoration: none; }
     </style>
 </head>
 <body>
-
     <div class="header">
-        <h1>EDMAR SHOES 👟</h1>
-        <p>EDMARSHOES YOUR FEET, OUR FATE</p>
-    </div>
-
-    <div class="container">
-        <h2 style="text-align: center; margin-bottom: 30px; font-weight: 400;">Viatu Vilivyopo Dukani Sasa Hivi</h2>
-        <div class="grid" id="dukaKuu">
-            <p style="text-align: center; grid-column: 1/-1; color: #777;">Inapakia bidhaa...</p>
+        <marquee class="marquee">KARIBU EDMARSHOES - TUNALETA VIATU VYA KISASA KWA BEI SAFI!</marquee>
+        <div class="nav">
+            <a href="/">Home</a>
+            <a href="#why-us">Why Us</a>
+            <a href="#shop">Bidhaa</a>
         </div>
     </div>
-
-    <div class="footer">
-        <p>&copy; 2026 EDMARSHOES. Haki zote zimehifadhiwa.</p>
-        <a href="/login.html">🔒 Mfumo wa Admin</a>
+    <div class="box"><h1>EDMARSHOES YOUR FEET, OUR FATE</h1></div>
+    <div class="box" id="why-us">
+        <div class="grid">
+            <div style="text-align:center"><h3>🚀 Delivery Haraka</h3></div>
+            <div style="text-align:center"><h3>💎 Ubora Og</h3></div>
+            <div style="text-align:center"><h3>💰 Bei Nafuu</h3></div>
+        </div>
     </div>
-
+    <div class="box" id="shop">
+        <div class="grid" id="product-list"></div>
+    </div>
     <script>
-        async function pakiaViatuDukani() {
-            try {
-                const res = await fetch('/api/products');
-                const viatu = await res.json();
-                const grid = document.getElementById('dukaKuu');
-                
-                if (viatu.length === 0) {
-                    grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #aaa;">Bado hakuna bidhaa zilizopandishwa dukani.</p>';
-                    return;
-                }
-
-                grid.innerHTML = viatu.map(v => {
-                    // Kutengeneza ujumbe wa WhatsApp kwa ajili ya kuagiza
-                    const ujumbe = encodeURIComponent(`Habari EDMAR SHOES, nataka kuagiza kiatu hiki:\n\nJina: ${v.name}\nBei: Tsh ${v.price}/=`);
-                    // Namba yako ya WhatsApp ya biashara
-                    const whatsappLink = `https://wa.me/255653434685?text=${ujumbe}`;
-
-                    return `
-                        <div class="card">
-                            <img src="${v.imageUrl}" onerror="this.src='/uploads/default.jpg'">
-                            <div class="card-body">
-                                <h3>${v.name}</h3>
-                                <p>${v.description || 'Kiatu kikali na cha kisasa.'}</p>
-                                <div class="price">Tsh ${v.price}/=</div>
-                                <a href="${whatsappLink}" target="_blank" class="btn-whatsapp">Agiza kwa WhatsApp 💬</a>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            } catch (e) {
-                document.getElementById('dukaKuu').innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #ff3b30;">Imefeli kupakia viatu kutoka kwenye server.</p>';
-            }
+        async function load() {
+            const res = await fetch('/api/products');
+            const data = await res.json();
+            document.getElementById('product-list').innerHTML = data.map(p => `
+                <div class="product-card">
+                    <img src="${p.imageUrl}" onclick="window.open('${p.imageUrl}')">
+                    <div style="padding:15px"><h3>${p.name}</h3><p>Tsh ${p.price}</p>
+                    <a href="https://wa.me/255653434685?text=Nataka ${p.name}" class="btn-wa">Agiza WhatsApp</a></div>
+                </div>
+            `).join('');
         }
-
-        // Washa duka pindi mteja anapofungua website
-        pakiaViatuDukani();
+        load();
     </script>
 </body>
 </html>
