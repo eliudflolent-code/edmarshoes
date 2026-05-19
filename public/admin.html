@@ -3,171 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EDMAR SHOES - Admin Dashboard</title>
+    <title>EDMAR ADMIN - Panel</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
-        .dashboard { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        h1 { color: #111; border-bottom: 3px solid #25D366; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        h3 { color: #2c3e50; margin-top: 25px; background: #e8f8f5; padding: 10px; border-radius: 6px; }
-        .box { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; }
-        input, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        button { background: #25D366; color: white; border: none; padding: 12px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 5px; font-size: 1rem; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f6f9; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 700px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        h2 { border-bottom: 3px solid #25D366; padding-bottom: 10px; color: #111; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
+        button { background: #25D366; color: black; border: none; padding: 14px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; font-size: 1.1rem; transition: 0.2s; }
         button:hover { background: #1ebd51; }
-        .logout-btn { background: #ff3b30; font-size: 0.9rem; padding: 8px 15px; width: auto; margin-top: 0; }
-        .list-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .list-table th, .list-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        .list-table th { background: #f8f9fa; }
-        .del-btn { background: #ff3b30; padding: 6px 12px; font-size: 0.85rem; width: auto; margin-top: 0; }
+        .product-list { margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; }
+        .item-row { display: flex; align-items: center; justify-content: space-between; background: #fafafa; padding: 10px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #eee; }
+        .item-row img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; }
+        .del-btn { background: #ff3b30; color: white; width: auto; padding: 6px 12px; font-size: 0.9rem; }
     </style>
 </head>
 <body>
-    <div class="dashboard">
-        <h1><span>Edmar Admin Panel 👟🔧</span> <button class="logout-btn" onclick="location.href='/api/admin/logout'">Logout</button></h1>
-        
-        <h3>1. Ongeza Kiatu Kipya (Bidhaa)</h3>
-        <div class="box">
-            <label>Jina la Raba:</label>
-            <input type="text" id="pName" placeholder="Mfano: Jordan 4 Retro">
-        </div>
-        <div class="box">
-            <label>Bei (Tsh):</label>
-            <input type="text" id="pPrice" placeholder="Mfano: 65,000">
-        </div>
-        <div class="box">
-            <label>Maelezo / Inspiration Description (Yataonekana kwenye Main):</label>
-            <textarea id="pDesc" rows="2" placeholder="Andika maelezo ya kuvutia kuhusu kiatu hiki..."></textarea>
-        </div>
-        <div class="box">
-            <label>Paste Link ya Picha (Kutoka Postimages):</label>
-            <input type="text" id="pUrl" placeholder="https://i.postimg.cc/...">
-        </div>
-        <button onclick="ongezaKiatu()">Pandisha Bidhaa Mpya 🚀</button>
 
-        <h3>2. Ongeza Picha Kwenye Slideshow (Header)</h3>
-        <div class="box">
-            <label>Paste Link ya Picha ya Slide (Kutoka Postimages):</label>
-            <input type="text" id="slideUrl" placeholder="https://i.postimg.cc/...">
-        </div>
-        <button onclick="ongezaSlide()" style="background: #3498db;">Weka Kwenye Slide 🖼️</button>
-        <button onclick="futaSlidesZote()" style="background: #e74c3c; margin-top: 8px;">Futa Picha Zote za Slide Tuanze Upya</button>
-
-        <h3>3. Badilisha Picha ya Background (Duka Zima)</h3>
-        <div class="box">
-            <label>Paste Link ya Background Image (Kutoka Postimages):</label>
-            <input type="text" id="bgUrl" placeholder="https://i.postimg.cc/...">
-        </div>
-        <button onclick="badilishaBg()" style="background: #9b59b6;">Hifadhi Background Mpya 🎨</button>
-
-        <h3>4. Badilisha Tangazo Linalotembea (Marquee)</h3>
-        <div class="box">
-            <label>Maandishi ya Tangazo:</label>
-            <input type="text" id="marqueeText" placeholder="Weka tangazo jipya hapa...">
-        </div>
-        <button onclick="badilishaMarquee()" style="background: #e67e22;">Update Tangazo 📢</button>
-
-        <h3>Viatu Vilivyopo Dukani Sasa Hivi</h3>
-        <table class="list-table">
-            <thead>
-                <tr><th>Picha</th><th>Kiatu & Maelezo</th><th>Bei</th><th>Kitendo</th></tr>
-            </thead>
-            <tbody id="orodhaKuu"></tbody>
-        </table>
+<div class="container">
+    <h2>EDMAR SHOES - Dashboard 🔧</h2>
+    
+    <div class="form-group">
+        <label>Jina la Kiatu:</label>
+        <input type="text" id="pName" placeholder="Mfano: Nike Airforce Msupuu">
     </div>
+    
+    <div class="form-group">
+        <label>Bei ya Kiatu (Tsh):</label>
+        <input type="text" id="pPrice" placeholder="Mfano: 45,000">
+    </div>
+    
+    <div class="form-group">
+        <label>Maelezo Mafupi (Category / Sifa):</label>
+        <textarea id="pDesc" rows="2" placeholder="Mfano: Inadumu na ni nzuri sana..."></textarea>
+    </div>
+    
+    <div class="form-group">
+        <label>Direct Link ya Picha (Kutoka Postimages):</label>
+        <input type="text" id="pUrl" placeholder="https://i.postimg.cc/...">
+    </div>
+    
+    <button type="button" onclick="pandishaMzigo()">Pandisha Bidhaa Mpya Moja kwa Moja 🚀</button>
 
-    <script>
-        async function ongezaKiatu() {
-            const data = {
-                name: document.getElementById('pName').value,
-                price: document.getElementById('pPrice').value,
-                description: document.getElementById('pDesc').value,
-                imageUrl: document.getElementById('pUrl').value
-            };
-            if(!data.name || !data.imageUrl) return alert('Jaza Jina na Link ya Picha!');
+    <div class="product-list">
+        <h3>Viatu Vilivyopo Dukani</h3>
+        <div id="orodhaKuu">Pakia viatu...</div>
+    </div>
+</div>
+
+<script>
+    async function pandishaMzigo() {
+        const name = document.getElementById('pName').value.trim();
+        const price = document.getElementById('pPrice').value.trim();
+        const description = document.getElementById('pDesc').value.trim();
+        const imageUrl = document.getElementById('pUrl').value.trim();
+
+        if (!name || !imageUrl) {
+            alert('Tafadhali jaza Jina la kiatu na Link ya Picha kabla ya kubonyeza!');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/products', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, price, description, imageUrl })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                alert('Hongera sana kaka! Mzigo mpya wa kiatu umepanda kwenye duka lako! 🎉');
+                // Safisha fomu
+                document.getElementById('pName').value = '';
+                document.getElementById('pPrice').value = '';
+                document.getElementById('pDesc').value = '';
+                document.getElementById('pUrl').value = '';
+                pakiaViatuVyetu();
+            } else {
+                alert('Server imegoma: ' + (data.error || 'Shida haijulikani'));
+            }
+        } catch (error) {
+            alert('Kosa la Mawasiliano: Imefeli kabisa kufika kwenye server!');
+        }
+    }
+
+    async function pakiaViatuVyetu() {
+        try {
+            const res = await fetch('/api/products');
+            const viatu = await res.json();
+            const div = document.getElementById('orodhaKuu');
             
-            const res = await fetch('/api/products', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(data)
-            });
-            if(res.ok) { 
-                alert('Kiatu kimeongezwa vizuri sana! 🎉'); 
-                location.reload(); 
-            } else { 
-                const errData = await res.json(); 
-                alert('Imegoma kwenye Server: ' + JSON.stringify(errData)); 
+            if(viatu.length === 0) {
+                div.innerHTML = '<p style="color:#999">Bado duka lipo tupu. Pandisha viatu juu!</p>';
+                return;
+            }
+
+            div.innerHTML = viatu.map(v => `
+                <div class="item-row">
+                    <img src="${v.imageUrl}">
+                    <div>
+                        <strong>${v.name}</strong><br>
+                        <small style="color:#777">Tsh ${v.price}/=</small>
+                    </div>
+                    <button class="del-btn" onclick="futaKiatu('${v._id}')">Futa</button>
+                </div>
+            `).join('');
+        } catch(e) {
+            document.getElementById('orodhaKuu').innerText = 'Imefeli kupakia orodha.';
+        }
+    }
+
+    async function futaKiatu(id) {
+        if (confirm('Je, una uhakika unataka kufuta kabisa kiatu hiki dukani?')) {
+            const res = await fetch('/api/products/' + id, { method: 'DELETE' });
+            if(res.ok) {
+                alert('Kiatu kimefutwa!');
+                pakiaViatuVyetu();
             }
         }
+    }
 
-        async function ongezaSlide() {
-            const value = document.getElementById('slideUrl').value;
-            if(!value) return alert('Paste link ya picha kwanza!');
-            const res = await fetch('/api/design', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ key: 'slideshow', value })
-            });
-            if(res.ok) { 
-                alert('Picha imeongezwa kwenye slide kwa mafanikio! 🖼️'); 
-                document.getElementById('slideUrl').value = ''; 
-            }
-        }
-
-        async function futaSlidesZote() {
-            if(confirm('Je, unataka kufuta picha zote za slide zilizopo?')) {
-                await fetch('/api/design/slideshow/clear', { method: 'POST' });
-                alert('Slide zote zimefutwa!');
-            }
-        }
-
-        async function badilishaBg() {
-            const value = document.getElementById('bgUrl').value;
-            if(!value) return alert('Paste link ya background!');
-            const res = await fetch('/api/design', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ key: 'background', value })
-            });
-            if(res.ok) alert('Background mpya imehifadhiwa! 🎨');
-        }
-
-        async function badilishaMarquee() {
-            const value = document.getElementById('marqueeText').value;
-            if(!value) return alert('Andika tangazo kwanza!');
-            const res = await fetch('/api/design', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ key: 'marquee', value })
-            });
-            if(res.ok) alert('Tangazo limebadilishwa kikamilifu! 📢');
-        }
-
-        async function pakiaViatu() {
-            try {
-                const res = await fetch('/api/products');
-                const viatu = await res.json();
-                const tbody = document.getElementById('orodhaKuu');
-                tbody.innerHTML = viatu.map(v => `
-                    <tr>
-                        <td><img src="${v.imageUrl}" width="60" height="60" style="object-fit:cover; border-radius:6px;"></td>
-                        <td><b>${v.name}</b><br><small style="color:#666">${v.description || ''}</small></td>
-                        <td>Tsh ${v.price}/=</td>
-                        <td><button class="del-btn" onclick="futaBidhaa('${v._id}')">Futa</button></td>
-                    </tr>
-                `).join('');
-            } catch (e) {
-                console.log("Shida ya kupakia viatu vya duka.");
-            }
-        }
-
-        async function futaBidhaa(id) {
-            if(confirm('Una uhakika unataka kufuta bidhaa hii?')) {
-                await fetch(`/api/products/${id}`, { method: 'DELETE' });
-                location.reload();
-            }
-        }
-
-        pakiaViatu();
-    </script>
+    // Washa orodha pindi ukurasa unapoandaliwa
+    pakiaViatuVyetu();
+</script>
 </body>
 </html>

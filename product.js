@@ -8,27 +8,22 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static('public'));
 
-// WEKA LINK YAKO HALISI YA MONGODB HAPA ILI ISITEGEMEE RENDER ENVIRONMENT VARIABLES
-const MONGO_URI = "mongodb+srv://eliudflolent_db_user:yMGkdJQ6FQfnrKdI@cluster0.wzwtfbe.mongodb.net/?appName=Cluster0";
+// LINK YAKO SAHIHI YA MONGODB KUTOKANA NA DATA ULIZOTUMA
+const MONGO_URI = "mongodb+srv://eliudflolent_db_user:yMGkdJQ6FQfnrKdI@cluster0.wzwtfbe.mongodb.net/edmarshoes?retryWrites=true&w=majority";
 
 mongoose.connect(MONGO_URI)
     .then(() => console.log("Database ya EDMAR Imeunganishwa Kikamilifu! 🔥"))
     .catch(err => console.error("Shida ya DB:", err));
 
-// Mfumo wa Database (Schemas)
-const ProductSchema = new mongoose.Schema({
-    name: String, price: String, description: String, imageUrl: String
-});
+// Mfumo wa Bidhaa (Schema)
+const Product = mongoose.model('Product', new mongoose.Schema({
+    name: String,
+    price: String,
+    description: String,
+    imageUrl: String
+}));
 
-const DesignSchema = new mongoose.Schema({
-    key: { type: String, unique: true },
-    value: String,
-    valueList: [String]
-});
-
-const Product = mongoose.model('Product', ProductSchema);
-const Design = mongoose.model('Design', DesignSchema);
-
+// Route ya Login
 app.post('/api/admin/login', (req, res) => {
     if (req.body.password === 'Edmar2026') {
         res.json({ success: true });
@@ -37,9 +32,14 @@ app.post('/api/admin/login', (req, res) => {
     }
 });
 
+// Route ya Kupokea Bidhaa Mpya (Sasa inapokea JSON safi bila kukwama)
 app.post('/api/products', async (req, res) => {
     try {
-        const newProduct = new Product(req.body);
+        const { name, price, description, imageUrl } = req.body;
+        if (!name || !imageUrl) {
+            return res.status(400).json({ error: 'Jaza Jina na Link ya Picha!' });
+        }
+        const newProduct = new Product({ name, price, description, imageUrl });
         await newProduct.save();
         res.json({ success: true });
     } catch (err) {
@@ -48,12 +48,8 @@ app.post('/api/products', async (req, res) => {
 });
 
 app.get('/api/products', async (req, res) => {
-    try {
-        const products = await Product.find();
-        res.json(products);
-    } catch (err) {
-        res.status(500).json([]);
-    }
+    const products = await Product.find().sort({ _id: -1 });
+    res.json(products);
 });
 
 app.delete('/api/products/:id', async (req, res) => {
@@ -61,29 +57,5 @@ app.delete('/api/products/:id', async (req, res) => {
     res.json({ success: true });
 });
 
-app.post('/api/design', async (req, res) => {
-    try {
-        const { key, value } = req.body;
-        if (key === 'slideshow') {
-            await Design.findOneAndUpdate({ key }, { $push: { valueList: value } }, { upsert: true });
-        } else {
-            await Design.findOneAndUpdate({ key }, { value }, { upsert: true });
-        }
-        res.json({ success: true });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
-app.post('/api/design/slideshow/clear', async (req, res) => {
-    await Design.findOneAndUpdate({ key: 'slideshow' }, { valueList: [] }, { upsert: true });
-    res.json({ success: true });
-});
-
-app.get('/api/design', async (req, res) => {
-    const data = await Design.find();
-    res.json(data);
-});
-
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log(`Server ipo Live kwenye port ${PORT} 🚀`));
+app.listen(PORT, () => console.log(`Server ya EDMAR ipo LIVE kwenye port ${PORT} 🚀`));
