@@ -1,21 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const session = require('express-session');
 const cors = require('cors');
-const path = require('path');
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static('public'));
-
-app.use(session({
-    secret: 'edmar_super_secret_2026',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 24 * 60 * 60 * 1000 } // Saa 24 login ihifadhiwe
-}));
 
 // Unganisha MongoDB
 mongoose.connect(process.env.MONGO_URI)
@@ -36,37 +27,24 @@ const DesignSchema = new mongoose.Schema({
 const Product = mongoose.model('Product', ProductSchema);
 const Design = mongoose.model('Design', DesignSchema);
 
-// Admin Login Route
+// Admin Login Route (Rahisi na ya Uhakika)
 app.post('/api/admin/login', (req, res) => {
     if (req.body.password === 'Edmar2026') {
-        req.session.isAdmin = true;
         res.json({ success: true });
     } else {
         res.status(401).json({ error: 'Password si sahihi!' });
     }
 });
 
-// Linda kurasa za Admin
-const checkAdmin = (req, res, next) => {
-    if (req.session.isAdmin) next();
-    else res.status(401).send('Huruhusiwi kuingia hapa bila login!');
-};
-
-app.get('/api/admin/check', (req, res) => {
-    if (req.session.isAdmin) res.json({ loggedIn: true });
-    else res.json({ loggedIn: false });
-});
-
-app.get('/api/admin/logout', (req, res) => {
-    req.session.destroy();
-    res.redirect('/login.html');
-});
-
-// --- API za Viatu (Products) ---
-app.post('/api/products', checkAdmin, async (req, res) => {
-    const newProduct = new Product(req.body);
-    await newProduct.save();
-    res.json({ success: true });
+// --- API za Viatu (Ziko wazi sasa hivi ili data ipite bila kizuizi) ---
+app.post('/api/products', async (req, res) => {
+    try {
+        const newProduct = new Product(req.body);
+        await newProduct.save();
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 app.get('/api/products', async (req, res) => {
@@ -74,13 +52,13 @@ app.get('/api/products', async (req, res) => {
     res.json(products);
 });
 
-app.delete('/api/products/:id', checkAdmin, async (req, res) => {
+app.delete('/api/products/:id', async (req, res) => {
     await Product.findByIdAndDelete(req.params.id);
     res.json({ success: true });
 });
 
-// --- API za Muonekano (Design) ---
-app.post('/api/design', checkAdmin, async (req, res) => {
+// --- API za Muonekano ---
+app.post('/api/design', async (req, res) => {
     const { key, value } = req.body;
     if (key === 'slideshow') {
         await Design.findOneAndUpdate({ key }, { $push: { valueList: value } }, { upsert: true });
@@ -90,7 +68,7 @@ app.post('/api/design', checkAdmin, async (req, res) => {
     res.json({ success: true });
 });
 
-app.post('/api/design/slideshow/clear', checkAdmin, async (req, res) => {
+app.post('/api/design/slideshow/clear', async (req, res) => {
     await Design.findOneAndUpdate({ key: 'slideshow' }, { valueList: [] }, { upsert: true });
     res.json({ success: true });
 });
