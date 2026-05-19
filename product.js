@@ -6,16 +6,22 @@ const multer = require('multer');
 
 const app = express();
 const STORE_FILE = path.join(__dirname, 'store.json');
+const UPLOADS_DIR = path.join(__dirname, 'public', 'uploads');
+
+// Hakikisha folder la uploads linatengenezwa kiotomatiki server ikianza
+if (!fs.existsSync(UPLOADS_DIR)) {
+    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+}
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static('public'));
 
-// Mfumo wa kupokea mafile ya picha halisi (Multer)
+// Mfumo wa kupokea picha halisi kutoka kwenye kifaa chako
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'public/uploads/');
+        cb(null, UPLOADS_DIR);
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -24,7 +30,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-// Kazi za kusoma na kuandika store.json
+// Kusoma store.json
 function readStore() {
     try {
         if (!fs.existsSync(STORE_FILE)) {
@@ -36,6 +42,7 @@ function readStore() {
     }
 }
 
+// Kuandika kwenye store.json
 function writeStore(data) {
     fs.writeFileSync(STORE_FILE, JSON.stringify(data, null, 2), 'utf8');
 }
@@ -48,7 +55,7 @@ app.post('/api/admin/login', (req, res) => {
     return res.status(401).json({ error: 'Password si sahihi!' });
 });
 
-// Route ya ku-upload Bidhaa Mpya na Picha Halisi
+// Route ya ku-upload bidhaa mpya ikiwa na picha halisi
 app.post('/api/products', upload.single('image'), (req, res) => {
     try {
         const { name, price, description } = req.body;
@@ -62,6 +69,8 @@ app.post('/api/products', upload.single('image'), (req, res) => {
         }
 
         const data = readStore();
+        if (!data.products) data.products = [];
+
         const newProduct = {
             id: 'prod_' + Math.random().toString(36).substr(2, 9),
             name,
@@ -80,22 +89,24 @@ app.post('/api/products', upload.single('image'), (req, res) => {
     }
 });
 
-// Kupata bidhaa zote
+// Route ya kupata bidhaa zote
 app.get('/api/products', (req, res) => {
     const data = readStore();
     return res.json(data.products || []);
 });
 
-// Kufuta Bidhaa
+// Route ya kufuta bidhaa
 app.delete('/api/products/:id', (req, res) => {
-    const data = readStore();
-    const productId = req.params.id;
-    
-    if (data.products) {
-        data.products = data.products.filter(p => p.id !== productId);
-        writeStore(data);
+    try {
+        const data = readStore();
+        if (data.products) {
+            data.products = data.products.filter(p => p.id !== req.params.id);
+            writeStore(data);
+        }
+        return res.json({ success: true });
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
     }
-    return res.json({ success: true });
 });
 
 const PORT = process.env.PORT || 10000;
