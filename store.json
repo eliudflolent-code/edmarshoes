@@ -1,0 +1,14 @@
+{
+  "admin": {
+    "username": "admin",
+    "passwordHash": "fd63cd7cb51eeb6cbce1ee04b2cee3adf6fda8cbeb255553bbd84bd4caa4c79b"
+  },
+  "settings": {
+    "storeName": "EDMARSHOES",
+    "heroEyebrow": "EDMASHOES YOUR FEET,OUR FATE",
+    "heroTitle": "jichagulie viatu vya kiume,,VIKALI",
+    "heroText": "Tunakufanyia delivery kwa Dar es salaam na mikoani pia",
+    "heroImage": "1.jpeg"
+  },
+  "products": []
+}

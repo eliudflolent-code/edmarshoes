@@ -1,61 +1,102 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const fs = require('fs');
+const path = require('path');
 const cors = require('cors');
+const multer = require('multer');
+
 const app = express();
+const STORE_FILE = path.join(__dirname, 'store.json');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static('public'));
 
-// LINK YAKO SAHIHI YA MONGODB KUTOKANA NA DATA ULIZOTUMA
-const MONGO_URI = "mongodb+srv://eliudflolent_db_user:yMGkdJQ6FQfnrKdI@cluster0.wzwtfbe.mongodb.net/edmarshoes?retryWrites=true&w=majority";
+// Mfumo wa kupokea mafile ya picha halisi (Multer)
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/uploads/');
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+});
+const upload = multer({ storage: storage });
 
-mongoose.connect(MONGO_URI)
-    .then(() => console.log("Database ya EDMAR Imeunganishwa Kikamilifu! 🔥"))
-    .catch(err => console.error("Shida ya DB:", err));
+// Kazi za kusoma na kuandika store.json
+function readStore() {
+    try {
+        if (!fs.existsSync(STORE_FILE)) {
+            return { products: [], settings: {} };
+        }
+        return JSON.parse(fs.readFileSync(STORE_FILE, 'utf8'));
+    } catch (e) {
+        return { products: [], settings: {} };
+    }
+}
 
-// Mfumo wa Bidhaa (Schema)
-const Product = mongoose.model('Product', new mongoose.Schema({
-    name: String,
-    price: String,
-    description: String,
-    imageUrl: String
-}));
+function writeStore(data) {
+    fs.writeFileSync(STORE_FILE, JSON.stringify(data, null, 2), 'utf8');
+}
 
-// Route ya Login
+// Route ya Login (Password: Edmar2026)
 app.post('/api/admin/login', (req, res) => {
     if (req.body.password === 'Edmar2026') {
-        res.json({ success: true });
-    } else {
-        res.status(401).json({ error: 'Password si sahihi!' });
+        return res.json({ success: true });
     }
+    return res.status(401).json({ error: 'Password si sahihi!' });
 });
 
-// Route ya Kupokea Bidhaa Mpya (Sasa inapokea JSON safi bila kukwama)
-app.post('/api/products', async (req, res) => {
+// Route ya ku-upload Bidhaa Mpya na Picha Halisi
+app.post('/api/products', upload.single('image'), (req, res) => {
     try {
-        const { name, price, description, imageUrl } = req.body;
-        if (!name || !imageUrl) {
-            return res.status(400).json({ error: 'Jaza Jina na Link ya Picha!' });
+        const { name, price, description } = req.body;
+        if (!name) {
+            return res.status(400).json({ error: 'Jina la kiatu linahitajika!' });
         }
-        const newProduct = new Product({ name, price, description, imageUrl });
-        await newProduct.save();
-        res.json({ success: true });
+
+        let imageUrl = '/uploads/default.jpg';
+        if (req.file) {
+            imageUrl = '/uploads/' + req.file.filename;
+        }
+
+        const data = readStore();
+        const newProduct = {
+            id: 'prod_' + Math.random().toString(36).substr(2, 9),
+            name,
+            price: price || "0",
+            description: description || "",
+            imageUrl,
+            createdAt: new Date()
+        };
+
+        data.products.unshift(newProduct);
+        writeStore(data);
+
+        return res.json({ success: true });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        return res.status(500).json({ error: err.message });
     }
 });
 
-app.get('/api/products', async (req, res) => {
-    const products = await Product.find().sort({ _id: -1 });
-    res.json(products);
+// Kupata bidhaa zote
+app.get('/api/products', (req, res) => {
+    const data = readStore();
+    return res.json(data.products || []);
 });
 
-app.delete('/api/products/:id', async (req, res) => {
-    await Product.findByIdAndDelete(req.params.id);
-    res.json({ success: true });
+// Kufuta Bidhaa
+app.delete('/api/products/:id', (req, res) => {
+    const data = readStore();
+    const productId = req.params.id;
+    
+    if (data.products) {
+        data.products = data.products.filter(p => p.id !== productId);
+        writeStore(data);
+    }
+    return res.json({ success: true });
 });
 
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log(`Server ya EDMAR ipo LIVE kwenye port ${PORT} 🚀`));
+app.listen(PORT, () => console.log(`Server ipo LIVE port ${PORT} 🚀`));

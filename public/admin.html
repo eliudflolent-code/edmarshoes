@@ -16,7 +16,7 @@
         .product-list { margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; }
         .item-row { display: flex; align-items: center; justify-content: space-between; background: #fafafa; padding: 10px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #eee; }
         .item-row img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; }
-        .del-btn { background: #ff3b30; color: white; width: auto; padding: 6px 12px; font-size: 0.9rem; }
+        .del-btn { background: #ff3b30; color: white; width: auto; padding: 6px 12px; font-size: 0.9rem; margin-top: 0; }
     </style>
 </head>
 <body>
@@ -24,70 +24,72 @@
 <div class="container">
     <h2>EDMAR SHOES - Dashboard 🔧</h2>
     
-    <div class="form-group">
-        <label>Jina la Kiatu:</label>
-        <input type="text" id="pName" placeholder="Mfano: Nike Airforce Msupuu">
-    </div>
-    
-    <div class="form-group">
-        <label>Bei ya Kiatu (Tsh):</label>
-        <input type="text" id="pPrice" placeholder="Mfano: 45,000">
-    </div>
-    
-    <div class="form-group">
-        <label>Maelezo Mafupi (Category / Sifa):</label>
-        <textarea id="pDesc" rows="2" placeholder="Mfano: Inadumu na ni nzuri sana..."></textarea>
-    </div>
-    
-    <div class="form-group">
-        <label>Direct Link ya Picha (Kutoka Postimages):</label>
-        <input type="text" id="pUrl" placeholder="https://i.postimg.cc/...">
-    </div>
-    
-    <button type="button" onclick="pandishaMzigo()">Pandisha Bidhaa Mpya Moja kwa Moja 🚀</button>
+    <form id="uploadForm">
+        <div class="form-group">
+            <label>Jina la Kiatu:</label>
+            <input type="text" name="name" id="pName" placeholder="Mfano: Jordan 4 Kali" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Bei ya Kiatu (Tsh):</label>
+            <input type="text" name="price" id="pPrice" placeholder="Mfano: 55,000">
+        </div>
+        
+        <div class="form-group">
+            <label>Maelezo Mafupi (Description):</label>
+            <textarea name="description" id="pDesc" rows="2" placeholder="Sifa za kiatu hiki..."></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label>Chagua Picha ya Kiatu (Kutoka Kwenye Faili):</label>
+            <input type="file" name="image" id="pImage" accept="image/*" required>
+        </div>
+        
+        <button type="submit">Pandisha Bidhaa Mpya Moja kwa Moja 🚀</button>
+    </form>
 
     <div class="product-list">
         <h3>Viatu Vilivyopo Dukani</h3>
-        <div id="orodhaKuu">Pakia viatu...</div>
+        <div id="orodhaKuu">Inapakia viatu...</div>
     </div>
 </div>
 
 <script>
-    async function pandishaMzigo() {
-        const name = document.getElementById('pName').value.trim();
-        const price = document.getElementById('pPrice').value.trim();
-        const description = document.getElementById('pDesc').value.trim();
-        const imageUrl = document.getElementById('pUrl').value.trim();
+    const form = document.getElementById('uploadForm');
 
-        if (!name || !imageUrl) {
-            alert('Tafadhali jaza Jina la kiatu na Link ya Picha kabla ya kubonyeza!');
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        
+        const name = document.getElementById('pName').value.trim();
+        const fileInput = document.getElementById('pImage');
+
+        if (!name || fileInput.files.length === 0) {
+            alert('Tafadhali jaza Jina la kiatu na Uchague Picha!');
             return;
         }
+
+        // Tunatumia FormData kama ulivyokuwa unatumia mwanzo kufanikisha picha kupanda
+        const formData = new FormData(form);
 
         try {
             const response = await fetch('/api/products', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, price, description, imageUrl })
+                body: formData
             });
 
             const data = await response.json();
 
             if (response.ok && data.success) {
                 alert('Hongera sana kaka! Mzigo mpya wa kiatu umepanda kwenye duka lako! 🎉');
-                // Safisha fomu
-                document.getElementById('pName').value = '';
-                document.getElementById('pPrice').value = '';
-                document.getElementById('pDesc').value = '';
-                document.getElementById('pUrl').value = '';
+                form.reset();
                 pakiaViatuVyetu();
             } else {
                 alert('Server imegoma: ' + (data.error || 'Shida haijulikani'));
             }
         } catch (error) {
-            alert('Kosa la Mawasiliano: Imefeli kabisa kufika kwenye server!');
+            alert('Kosa la Mawasiliano: Kushindwa kabisa kufika kwenye server!');
         }
-    }
+    });
 
     async function pakiaViatuVyetu() {
         try {
@@ -107,7 +109,7 @@
                         <strong>${v.name}</strong><br>
                         <small style="color:#777">Tsh ${v.price}/=</small>
                     </div>
-                    <button class="del-btn" onclick="futaKiatu('${v._id}')">Futa</button>
+                    <button class="del-btn" onclick="futaKiatu('${v.id}')">Futa</button>
                 </div>
             `).join('');
         } catch(e) {
@@ -125,7 +127,6 @@
         }
     }
 
-    // Washa orodha pindi ukurasa unapoandaliwa
     pakiaViatuVyetu();
 </script>
 </body>
