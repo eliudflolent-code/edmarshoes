@@ -8,11 +8,7 @@
     <style>
         body { margin: 0; font-family: 'Segoe UI', sans-serif; color: white; background-attachment: fixed; background-size: cover; }
         
-        .header { 
-            position: sticky; top: 0; z-index: 1000; 
-            background: rgba(0,0,0,0.95); padding: 10px; 
-            border-bottom: 3px solid #25D366; text-align: center; 
-        }
+        .header { position: sticky; top: 0; z-index: 1000; background: rgba(0,0,0,0.95); padding: 10px; border-bottom: 3px solid #25D366; text-align: center; }
         .brand-name { font-size: 1.5rem; font-weight: bold; color: #fff; letter-spacing: 1px; }
         .nav { display: flex; justify-content: center; gap: 15px; font-size: 0.9rem; }
         .nav a { color: white; text-decoration: none; font-weight: bold; }
@@ -20,13 +16,15 @@
         .container { max-width: 100%; padding: 10px; }
         .box { background: rgba(0,0,0,0.7); border-radius: 15px; padding: 15px; margin-bottom: 15px; border: 1px solid #444; }
         
-        /* Slider responsive */
         .slider-box { height: 200px; position: relative; overflow: hidden; border-radius: 15px; border: 2px solid #25D366; }
         .slider-box img { width: 100%; height: 100%; object-fit: cover; position: absolute; opacity: 0; transition: opacity 1s ease-in-out; }
         
-        /* Grid inajipanga yenyewe */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-        .card { background: #1a1a1a; border-radius: 15px; padding: 10px; text-align: center; border: 1px solid #333; }
+        
+        /* HOVER EFFECT IMEARUDI HAPA */
+        .card { background: #1a1a1a; border-radius: 15px; padding: 10px; text-align: center; border: 1px solid #333; transition: 0.3s ease; }
+        .card:hover { transform: translateY(-8px); border-color: #25D366; box-shadow: 0 8px 15px rgba(37, 211, 102, 0.4); }
+        
         .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; }
         .card h3 { font-size: 1rem; margin: 10px 0; }
         
