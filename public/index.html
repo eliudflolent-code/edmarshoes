@@ -3,215 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EDMAR SHOES 🚀</title>
+    <title>EDMAR SHOES - Duka la Viatu Vikali</title>
     <style>
-        /* Msingi na Muonekano wa Background inayowekwa na Admin */
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
-            margin: 0; padding: 0; 
-            background-color: #0f0f12;
-            background-size: cover; 
-            background-position: center; 
-            background-attachment: fixed; 
-            color: #fff;
-            transition: background 0.5s ease-in-out;
-        }
-
-        /* Marquee Imara */
-        .marquee-top { background: #000; color: #25D366; padding: 12px; font-weight: bold; font-size: 1.1rem; border-bottom: 2px solid #25D366; }
-
-        /* HEADER SECTION */
-        header { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); position: sticky; top: 0; z-index: 100; }
-        .logo { font-size: 1.8rem; font-weight: 900; color: #25D366; text-transform: uppercase; letter-spacing: 2px; }
-        nav a { color: white; text-decoration: none; margin-left: 25px; font-weight: bold; font-size: 1.1rem; transition: 0.3s; }
-        nav a:hover { color: #25D366; }
-
-        /* SLIDESHOW YA HEADER */
-        .slideshow-area { max-width: 900px; position: relative; margin: 25px auto; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.7); height: 380px; background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.1); display: none; }
-        .mySlides img { width: 100%; height: 380px; object-fit: cover; }
-
-        /* MAIN SECTION */
-        main { max-width: 1200px; margin: 40px auto; padding: 0 20px; background: rgba(0, 0, 0, 0.75); border-radius: 16px; padding-top: 20px; padding-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
-        .section-title { text-align: center; font-size: 2.2rem; color: #25D366; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 1px; }
-
-        /* WHY US SUB-SECTION */
-        .why-us { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 5px; padding: 25px; background: rgba(37, 211, 102, 0.1); border-radius: 12px; border: 1px solid rgba(37, 211, 102, 0.3); }
-        .why-card { flex: 1; min-width: 250px; text-align: center; padding: 15px; }
-        .why-card h4 { color: #25D366; font-size: 1.3rem; margin-bottom: 10px; }
-
-        /* GRID YA BIDHAA */
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 30px; }
-        .shoe-box { background: rgba(20, 20, 25, 0.9); border-radius: 14px; padding: 18px; text-align: center; border: 1px solid #333; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
-        
-        /* HOVER EFFECT YA BOXES */
-        .shoe-box:hover { transform: translateY(-10px) scale(1.02); border-color: #25D366; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3); }
-        .shoe-box img { width: 100%; height: 250px; object-fit: cover; border-radius: 10px; transition: 0.3s; }
-        .shoe-box h3 { font-size: 1.4rem; margin: 15px 0 8px 0; color: #fff; }
-        .shoe-desc { color: #aaa; font-size: 0.95rem; margin-bottom: 15px; height: 45px; overflow: hidden; font-style: italic; }
-        .shoe-price { font-size: 1.4rem; color: #25D366; font-weight: bold; margin-bottom: 15px; }
-        .btn-order { background: #25D366; color: black; border: none; padding: 12px 20px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; gap: 8px; box-sizing: border-box; }
-        .btn-order:hover { background: #1ebd51; }
-
-        /* FOOTER SECTION */
-        footer { background: rgba(0, 0, 0, 0.9); padding: 30px 20px; text-align: center; border-top: 2px solid #25D366; font-weight: bold; font-size: 1.1rem; }
-
-        /* MODAL / POPUP YA PICHA INAPOCLICKIWA */
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; backdrop-filter: blur(8px); }
-        .modal-content { background: #1a1a24; padding: 25px; border-radius: 15px; max-width: 500px; width: 90%; text-align: center; position: relative; border: 2px solid #25D366; animation: zoom 0.3s ease; }
-        @keyframes zoom { from {transform: scale(0.7); opacity: 0;} to {transform: scale(1); opacity: 1;} }
-        .modal-content img { width: 100%; max-height: 380px; object-fit: cover; border-radius: 10px; }
-        .modal-content h2 { margin: 15px 0 10px 0; color: #25D366; }
-        .modal-content p { color: #ccc; margin-bottom: 20px; line-height: 1.5; }
-        .close-modal { position: absolute; top: 10px; right: 20px; color: white; font-size: 2rem; cursor: pointer; font-weight: bold; }
-        .close-modal:hover { color: #ff3b30; }
+        body { font-family: 'Segoe UI', sans-serif; background: #111; color: white; margin: 0; padding: 0; }
+        .header { background: #222; padding: 20px; text-align: center; border-bottom: 3px solid #25D366; }
+        .header h1 { margin: 0; color: #25D366; font-size: 2.5rem; }
+        .header p { margin: 5px 0 0 0; color: #aaa; font-style: italic; }
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .card { background: #222; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.5); border: 1px solid #333; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); border-color: #25D366; }
+        .card img { width: 100%; height: 280px; object-fit: cover; }
+        .card-body { padding: 20px; text-align: center; }
+        .card-body h3 { margin: 0 0 10px 0; font-size: 1.4rem; color: #fff; }
+        .card-body p { margin: 0 0 15px 0; color: #aaa; font-size: 0.9rem; height: 40px; overflow: hidden; }
+        .price { font-size: 1.3rem; font-weight: bold; color: #25D366; margin-bottom: 15px; }
+        .btn-whatsapp { display: inline-block; background: #25D366; color: black; text-decoration: none; padding: 12px 25px; font-weight: bold; border-radius: 8px; width: 80%; transition: 0.2s; }
+        .btn-whatsapp:hover { background: #1ebd51; }
+        .footer { background: #111; text-align: center; padding: 40px 20px; color: #555; font-size: 0.85rem; margin-top: 50px; }
+        .footer a { color: #333; text-decoration: none; }
     </style>
 </head>
 <body>
 
-    <div class="marquee-top">
-        <marquee id="idTangazo">Karibu EDMAR SHOES - Mzigo mpya wa raba kali za kijanja umerudi! 🔥👟</marquee>
+    <div class="header">
+        <h1>EDMAR SHOES 👟</h1>
+        <p>EDMARSHOES YOUR FEET, OUR FATE</p>
     </div>
 
-    <header>
-        <div class="logo">EDMAR SHOES</div>
-        <nav>
-            <a href="#">Home</a>
-            <a href="#whyUsSection">Why Us</a>
-            <a href="#bidhaaSection">Bidhaa</a>
-        </nav>
-    </header>
-
-    <div class="slideshow-area" id="slideBox"></div>
-
-    <main>
-        
-        <section id="whyUsSection" style="padding-top: 20px;">
-            <div class="section-title">Why Choose Us?</div>
-            <div class="why-us">
-                <div class="why-card">
-                    <h4>Ubora wa Juu ⭐</h4>
-                    <p>Tunauza raba imara, za kudumu na zenye viwango vya juu kabisa vya kimataifa.</p>
-                </div>
-                <div class="why-card">
-                    <h4>Bei Nafuu 💰</h4>
-                    <p>Hapa utapata raba kali kwa bei ya kirafiki inayofanana kabisa na mfuko wako.</p>
-                </div>
-                <div class="why-card">
-                    <h4>Uaminifu 🤝</h4>
-                    <p>Agiza kiatu chako sasa, utafanyiwa delivery haraka na kwa usalama mkubwa sana.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="bidhaaSection" style="padding-top: 40px;">
-            <div class="section-title">Bidhaa Zetu Kali</div>
-            <div class="products-grid" id="gridKuu"></div>
-        </section>
-
-    </main>
-
-    <footer>
-        <p>&copy; 2026 EDMAR SHOES. All Rights Reserved. Designed to Keep You Clean! 👟🔥</p>
-    </footer>
-
-    <div class="modal" id="pichaModal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="fungaModal()">&times;</span>
-            <img id="mImg" src="">
-            <h2 id="mTitle">Jina la Kiatu</h2>
-            <p id="mDesc">Maelezo mafupi ya kiatu yataonekana hapa...</p>
-            <div id="mPrice" style="font-size: 1.5rem; color:#25D366; font-weight:bold; margin-bottom:20px;">Tsh 0/=</div>
-            <a id="mWaBtn" href="" target="_blank" class="btn-order">Agiza Sasa kwa WhatsApp 💬</a>
+    <div class="container">
+        <h2 style="text-align: center; margin-bottom: 30px; font-weight: 400;">Viatu Vilivyopo Dukani Sasa Hivi</h2>
+        <div class="grid" id="dukaKuu">
+            <p style="text-align: center; grid-column: 1/-1; color: #777;">Inapakia bidhaa...</p>
         </div>
     </div>
 
+    <div class="footer">
+        <p>&copy; 2026 EDMARSHOES. Haki zote zimehifadhiwa.</p>
+        <a href="/login.html">🔒 Mfumo wa Admin</a>
+    </div>
+
     <script>
-        let bidhaaZote = [];
+        async function pakiaViatuDukani() {
+            try {
+                const res = await fetch('/api/products');
+                const viatu = await res.json();
+                const grid = document.getElementById('dukaKuu');
+                
+                if (viatu.length === 0) {
+                    grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #aaa;">Bado hakuna bidhaa zilizopandishwa dukani.</p>';
+                    return;
+                }
 
-        async function washaMfumo() {
-            // 1. Pakia Muonekano (Designs kutoka DB)
-            const dRes = await fetch('/api/design');
-            const designs = await dRes.json();
-            
-            designs.forEach(d => {
-                if(d.key === 'background' && d.value) {
-                    document.body.style.backgroundImage = `url('${d.value}')`;
-                }
-                if(d.key === 'marquee' && d.value) {
-                    document.getElementById('idTangazo').innerText = d.value;
-                }
-                if(d.key === 'slideshow' && d.valueList && d.valueList.length > 0) {
-                    const sBox = document.getElementById('slideBox');
-                    sBox.style.display = 'block';
-                    sBox.innerHTML = d.valueList.map(img => `
-                        <div class="mySlides" style="display:none;">
-                            <img src="${img}">
+                grid.innerHTML = viatu.map(v => {
+                    // Kutengeneza ujumbe wa WhatsApp kwa ajili ya kuagiza
+                    const ujumbe = encodeURIComponent(`Habari EDMAR SHOES, nataka kuagiza kiatu hiki:\n\nJina: ${v.name}\nBei: Tsh ${v.price}/=`);
+                    // Namba yako ya WhatsApp ya biashara
+                    const whatsappLink = `https://wa.me/255653434685?text=${ujumbe}`;
+
+                    return `
+                        <div class="card">
+                            <img src="${v.imageUrl}" onerror="this.src='/uploads/default.jpg'">
+                            <div class="card-body">
+                                <h3>${v.name}</h3>
+                                <p>${v.description || 'Kiatu kikali na cha kisasa.'}</p>
+                                <div class="price">Tsh ${v.price}/=</div>
+                                <a href="${whatsappLink}" target="_blank" class="btn-whatsapp">Agiza kwa WhatsApp 💬</a>
+                            </div>
                         </div>
-                    `).join('');
-                    anzishaSlides();
-                }
-            });
-
-            // 2. Pakia Viatu (Products kutoka DB)
-            const pRes = await fetch('/api/products');
-            bidhaaZote = await pRes.json();
-            const grid = document.getElementById('gridKuu');
-            
-            if(bidhaaZote.length === 0) {
-                grid.innerHTML = `<p style="text-align:center; width:100%; grid-column:1/-1; font-size:1.2rem; color:#999;">Bado hakuna bidhaa zilizopandishwa. Ingia Admin uweke mzigo! 👟</p>`;
-                return;
+                    `;
+                }).join('');
+            } catch (e) {
+                document.getElementById('dukaKuu').innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #ff3b30;">Imefeli kupakia viatu kutoka kwenye server.</p>';
             }
-
-            grid.innerHTML = bidhaaZote.map((v, index) => {
-                const textOda = encodeURIComponent(`Habari EDMAR SHOES! Nahitaji raba hii:\n\n👟 Kiatu: ${v.name}\n💰 Bei: Tsh ${v.price}/=\nℹ️ Maelezo: ${v.description || ''}\n🖼️ Link ya Picha: ${v.imageUrl}`);
-                return `
-                    <div class="shoe-box" onclick="funguaModal(${index}, event)">
-                        <img src="${v.imageUrl}" alt="${v.name}">
-                        <h3>${v.name}</h3>
-                        <p class="shoe-desc">${v.description || 'Raba kali sana ya kijanja, wahi mapema mzigo usiishe!'}</p>
-                        <div class="shoe-price">Tsh ${v.price}/=</div>
-                        <a href="https://wa.me/255616807103?text=${textOda}" target="_blank" class="btn-order" onclick="event.stopPropagation();">Agiza kwa WhatsApp 💬</a>
-                    </div>
-                `;
-            }).join('');
         }
 
-        // Mfumo wa Slideshow
-        let slideIdx = 0;
-        function anzishaSlides() {
-            let slides = document.getElementsByClassName("mySlides");
-            for (let i = 0; i < slides.length; i++) slides[i].style.display = "none";
-            slideIdx++;
-            if (slideIdx > slides.length) slideIdx = 1;
-            if(slides[slideIdx-1]) slides[slideIdx-1].style.display = "block";
-            setTimeout(anzishaSlides, 4000); // Inabadilisha kila baada ya sekunde 4
-        }
-
-        // Mfumo wa Popup/Modal ya Picha
-        function funguaModal(index, event) {
-            const v = bidhaaZote[index];
-            document.getElementById('mImg').src = v.imageUrl;
-            document.getElementById('mTitle').innerText = v.name;
-            document.getElementById('mDesc').innerText = v.description || 'Raba ya kijanja na ya kisasa.';
-            document.getElementById('mPrice').innerText = `Tsh ${v.price}/=`;
-            
-            const textOda = encodeURIComponent(`Habari EDMAR SHOES! Nahitaji raba hii niliyoiona kwenye Popup:\n\n👟 Kiatu: ${v.name}\n💰 Bei: Tsh ${v.price}/=\n🖼️ Picha: ${v.imageUrl}`);
-            document.getElementById('mWaBtn').href = `https://wa.me/255616807103?text=${textOda}`;
-            
-            document.getElementById('pichaModal').style.display = 'flex';
-        }
-
-        function fungaModal() {
-            document.getElementById('pichaModal').style.display = 'none';
-        }
-
-        // Funga modal mtu akiclick nje ya box
-        window.onclick = function(event) {
-            const m = document.getElementById('pichaModal');
-            if (event.target == m) m.style.display = 'none';
-        }
-
-        washaMfumo();
+        // Washa duka pindi mteja anapofungua website
+        pakiaViatuDukani();
     </script>
 </body>
 </html>
