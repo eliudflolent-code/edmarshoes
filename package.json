@@ -4,7 +4,8 @@
   "description": "Edmar Shoes Web Store",
   "main": "product.js",
   "scripts": {
-    "start": "node product.js"
+    "start": "node product.js",
+    "yarn-start": "node product.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
