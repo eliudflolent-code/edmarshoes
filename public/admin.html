@@ -3,49 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EDMAR - Admin Panel</title>
+    <title>EDMAR SHOES - Admin Dashboard</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f6f9; padding: 20px; color: #333; }
-        .admin-box { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        h2 { text-align: center; margin-bottom: 25px; color: #111; }
-        label { font-weight: bold; display: block; margin-top: 15px; }
-        input, textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; background: #25D366; color: white; border: none; padding: 12px; margin-top: 20px; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; }
-        button:hover { background: #21b855; }
-        .logout-btn { background: #ff4d4d; margin-top: 10px; }
-        .logout-btn:hover { background: #e60000; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
+        .dashboard { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h1 { color: #111; border-bottom: 3px solid #25D366; padding-bottom: 10px; display: flex; justify-content: space-between; }
+        h3 { color: #2c3e50; margin-top: 25px; background: #e8f8f5; padding: 10px; border-radius: 6px; }
+        .box { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; }
+        input, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        button { background: #25D366; color: white; border: none; padding: 12px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 5px; font-size: 1rem; }
+        button:hover { background: #1ebd51; }
+        .logout-btn { background: #ff3b30; font-size: 0.9rem; padding: 5px 10px; width: auto; }
+        .list-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .list-table th, .list-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        .list-table th { background: #f8f9fa; }
+        .del-btn { background: #ff3b30; padding: 6px 12px; font-size: 0.85rem; width: auto; }
     </style>
 </head>
 <body>
-<div class="admin-box">
-    <h2>EDMAR Control Panel 🛠️</h2>
-    
-    <form action="/api/products" method="POST">
-        <label>Jina la Kiatu:</label>
-        <input type="text" name="title" required placeholder="Mfano: Nike Air Force 1">
+    <div class="dashboard">
+        <h1><span>Edmar Admin Panel 👟🔧</span> <button class="logout-btn" onclick="location.href='/api/admin/logout'">Logout</button></h1>
         
-        <label>Link ya Picha (Direct Link):</label>
-        <input type="url" name="imageUrl" required placeholder="https://images.unsplash.com/...">
-        
-        <label>Bei (Tsh):</label>
-        <input type="text" name="price" required placeholder="Mfano: 45,000">
-        
-        <label>Maelezo ya Kiatu:</label>
-        <textarea name="description" rows="3" required placeholder="Weka saizi zilizopo..."></textarea>
-        
-        <button type="submit">Upload Bidhaa Mpya 🎉</button>
-    </form>
+        <h3>1. Ongeza Kiatu Kipya (Bidhaa)</h3>
+        <div class="box">
+            <label>Jina la Raba:</label>
+            <input type="text" id="pName" placeholder="Mfano: Jordan 4 Retro">
+        </div>
+        <div class="box">
+            <label>Bei (Tsh):</label>
+            <input type="text" id="pPrice" placeholder="Mfano: 65,000">
+        </div>
+        <div class="box">
+            <label>Maelezo / Inspiration Description (Yataonekana kwenye Main):</label>
+            <textarea id="pDesc" rows="2" placeholder="Andika maelezo ya kuvutia kuhusu kiatu hiki..."></textarea>
+        </div>
+        <div class="box">
+            <label>Paste Link ya Picha (Kutoka Postimages):</label>
+            <input type="text" id="pUrl" placeholder="https://i.postimg.cc/...">
+        </div>
+        <button onclick="ongezaKiatu()">Pandisha Bidhaa Mpya 🚀</button>
 
-    <hr style="margin:30px 0; border:0; border-top:1px solid #eee;">
-    
-    <form action="/api/settings" method="POST">
-        <input type="hidden" name="key" value="marquee_text">
-        <label>Badilisha Tangazo Linalotembea (Marquee):</label>
-        <input type="text" name="value" required placeholder="Weka tangazo jipya hapa...">
-        <button type="submit" style="background:#3498db;">Update Tangazo 📢</button>
-    </form>
+        <h3>2. Ongeza Picha Kwenye Slideshow (Header)</h3>
+        <div class="box">
+            <label>Paste Link ya Picha ya Slide (Kutoka Postimages):</label>
+            <input type="text" id="slideUrl" placeholder="https://i.postimg.cc/...">
+        </div>
+        <button onclick="ongezaSlide()" style="background: #3498db;">Weka Kwenye Slide 🖼️</button>
+        <button onclick="futaSlides zote()" style="background: #e74c3c; margin-top: 8px;">Futa Picha Zote za Slide Tuanze Upya</button>
 
-    <a href="/api/admin/logout"><button class="logout-btn">Ondoka Kwenye Mfumo (Logout) 🚪</button></a>
-</div>
+        <h3>3. Badilisha Picha ya Background (Duka Zima)</h3>
+        <div class="box">
+            <label>Paste Link ya Background Image (Kutoka Postimages):</label>
+            <input type="text" id="bgUrl" placeholder="https://i.postimg.cc/...">
+        </div>
+        <button onclick="badilishaBg()" style="background: #9b59b6;">Hifadhi Background Mpya 🎨</button>
+
+        <h3>4. Badilisha Tangazo Linalotembea (Marquee)</h3>
+        <div class="box">
+            <label>Maandishi ya Tangazo:</label>
+            <input type="text" id="marqueeText" placeholder="Weka tangazo jipya hapa...">
+        </div>
+        <button onclick="badilishaMarquee()" style="background: #e67e22;">Update Tangazo 📢</button>
+
+        <h3>Viatu Vilivyopo Dukani Sasa Hivi</h3>
+        <table class="list-table">
+            <thead>
+                <tr><th>Picha</th><th>Kiatu & Maelezo</th><th>Bei</th><th>Kitendo</th></tr>
+            </thead>
+            <tbody id="orodhaKuu"></tbody>
+        </table>
+    </div>
+
+    <script>
+        // Linda Dashboard isifunguke kama hujalogin
+        async function kaguaUlinzi() {
+            const res = await fetch('/api/admin/check');
+            const data = await res.json();
+            if(!data.loggedIn) window.location.href = '/login.html';
+        }
+
+        async function ongezaKiatu() {
+            const data = {
+                name: document.getElementById('pName').value,
+                price: document.getElementById('pPrice').value,
+                description: document.getElementById('pDesc').value,
+                imageUrl: document.getElementById('pUrl').value
+            };
+            if(!data.name || !data.imageUrl) return alert('Jaza Jina na Link ya Picha!');
+            
+            const res = await fetch('/api/products', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            if(res.ok) { alert('Kiatu kimeongezwa!'); location.reload(); }
+        }
+
+        async function ongezaSlide() {
+            const value = document.getElementById('slideUrl').value;
+            if(!value) return alert('Paste link ya picha kwanza!');
+            const res = await fetch('/api/design', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ key: 'slideshow', value })
+            });
+            if(res.ok) { alert('Picha imeongezwa kwenye slide!'); document.getElementById('slideUrl').value = ''; }
+        }
+
+        async function futaSlideszote() {
+            if(confirm('Je, unataka kufuta picha zote za slide zilizopo?')) {
+                await fetch('/api/design/slideshow/clear', { method: 'POST' });
+                alert('Slide zote zimefutwa!');
+            }
+        }
+
+        async function badilishaBg() {
+            const value = document.getElementById('bgUrl').value;
+            if(!value) return alert('Paste link ya background!');
+            const res = await fetch('/api/design', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ key: 'background', value })
+            });
+            if(res.ok) alert('Background imehifadhiwa!');
+        }
+
+        async function badilishaMarquee() {
+            const value = document.getElementById('marqueeText').value;
+            if(!value) return alert('Andika tangazo kwanza!');
+            const res = await fetch('/api/design', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ key: 'marquee', value })
+            });
+            if(res.ok) alert('Tangazo limebadilishwa kikamilifu!');
+        }
+
+        async function pakiaViatu() {
+            const res = await fetch('/api/products');
+            const viatu = await res.json();
+            const tbody = document.getElementById('orodhaKuu');
+            tbody.innerHTML = viatu.map(v => `
+                <tr>
+                    <td><img src="${v.imageUrl}" width="60" height="60" style="object-fit:cover; border-radius:6px;"></td>
+                    <td><b>${v.name}</b><br><small style="color:#666">${v.description || ''}</small></td>
+                    <td>Tsh ${v.price}/=</td>
+                    <td><button class="del-btn" onclick="futaBidhaa('${v._id}')">Futa</button></td>
+                </tr>
+            `).join('');
+        }
+
+        async function futaBidhaa(id) {
+            if(confirm('Una uhakika unataka kufuta bidhaa hii?')) {
+                await fetch(`/api/products/${id}`, { method: 'DELETE' });
+                location.reload();
+            }
+        }
+
+        kaguaUlinzi();
+        pakiaViatu();
+    </script>
 </body>
 </html>
