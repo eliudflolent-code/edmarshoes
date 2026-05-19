@@ -1,28 +1,87 @@
 <!DOCTYPE html>
-<html>
+<html lang="sw">
 <head>
+    <meta charset="UTF-8">
+    <title>EDMARSHOES</title>
     <style id="bgStyle"></style>
     <style>
-        .box { background: rgba(0,0,0,0.7); border-radius: 20px; padding: 20px; margin: 10px; color: white; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; color: white; background-attachment: fixed; background-size: cover; }
+        /* Header */
+        .header { background: rgba(0,0,0,0.9); padding: 20px; border-bottom: 3px solid #25D366; text-align: center; }
+        .nav { display: flex; justify-content: center; gap: 20px; margin-top: 15px; }
+        .nav a { color: white; text-decoration: none; font-weight: bold; }
+        
+        /* Container kuu */
+        .container { max-width: 1100px; margin: auto; padding: 20px; }
+        .box { background: rgba(0,0,0,0.7); border-radius: 25px; padding: 20px; margin-bottom: 20px; border: 1px solid #444; }
+        
+        /* Slider & Grid */
+        .slider-grid { display: flex; gap: 15px; overflow-x: auto; padding: 10px; }
+        .slider-grid img { height: 200px; border-radius: 20px; border: 2px solid #25D366; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .card { background: #1a1a1a; border-radius: 25px; padding: 15px; text-align: center; border: 1px solid #333; }
+        .card img { width: 100%; height: 250px; object-fit: cover; border-radius: 20px; cursor: pointer; }
+        
+        .whatsapp-btn { display: block; background: #25D366; color: black; padding: 10px; border-radius: 15px; text-decoration: none; font-weight: bold; margin-top: 10px; }
+        footer { text-align: center; padding: 30px; background: rgba(0,0,0,0.8); border-radius: 20px; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <div id="content"></div>
+
+    <div class="header">
+        <marquee style="color:#25D366; font-weight:bold" id="marqueeText"></marquee>
+        <div class="nav">
+            <a href="/">HOME</a>
+            <a href="#why-us">WHY US</a>
+            <a href="#shop">BIDHAA</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="box" id="slider">
+            <h2 style="text-align:center">PICHA ZA KUSLIDE</h2>
+            <div class="slider-grid" id="slideList"></div>
+        </div>
+
+        <div class="box" id="why-us">
+            <h2 style="text-align:center">PROMO</h2>
+            <div class="grid" id="promoList"></div>
+        </div>
+
+        <div class="box" id="shop">
+            <h2 style="text-align:center">BIDHAA ZETU</h2>
+            <div class="grid" id="productList"></div>
+        </div>
+    </div>
+
+    <footer>&copy; 2026 EDMARSHOES - ALL RIGHTS RESERVED</footer>
+
     <script>
-        async function load() {
-            const [s, sl, p] = await Promise.all([fetch('/api/settings').then(r=>r.json()), fetch('/api/slides').then(r=>r.json()), fetch('/api/products').then(r=>r.json())]);
-            document.getElementById('bgStyle').innerHTML = `body { background: url('${s.bgImage}') fixed center; }`;
-            document.getElementById('content').innerHTML = `
-                <div class="box"><marquee>${s.marquee || ''}</marquee></div>
-                <div class="box">
-                    <div class="grid">${sl.map(i=>`<img src="${i.imageUrl}" style="width:100px; border-radius:10px">`).join('')}</div>
-                    <h3>Promo: ${s.promo1 || ''} | ${s.promo2 || ''} | ${s.promo3 || ''}</h3>
-                </div>
-                <div class="box grid">${p.map(i=>`<div onclick="window.open('${i.imageUrl}')"><img src="${i.imageUrl}" style="width:100%; border-radius:20px"><h3>${i.name}</h3><a href="https://wa.me/255653434685">Agiza WhatsApp 💬</a></div>`).join('')}</div>
+        async function init() {
+            const [s, sl, p] = await Promise.all([
+                fetch('/api/settings').then(r=>r.json()),
+                fetch('/api/slides').then(r=>r.json()),
+                fetch('/api/products').then(r=>r.json())
+            ]);
+            
+            document.getElementById('bgStyle').innerHTML = `body { background: url('${s.bgImage || 'https://i.postimg.cc/bg-image.jpg'}') center/cover; }`;
+            document.getElementById('marqueeText').innerText = s.marquee || 'KARIBU EDMARSHOES';
+            document.getElementById('promoList').innerHTML = `
+                <div class="card"><h3>${s.promo1 || 'Ubora'}</h3></div>
+                <div class="card"><h3>${s.promo2 || 'Bei Safi'}</h3></div>
+                <div class="card"><h3>${s.promo3 || 'Fast Delivery'}</h3></div>
             `;
+            document.getElementById('slideList').innerHTML = sl.map(i => `<img src="${i.imageUrl}">`).join('');
+            document.getElementById('productList').innerHTML = p.map(i => `
+                <div class="card">
+                    <img src="${i.imageUrl}" onclick="window.open('${i.imageUrl}')">
+                    <h3>${i.name}</h3>
+                    <p>Tsh ${i.price}</p>
+                    <a href="https://wa.me/255653434685?text=Nataka ${i.name}" class="whatsapp-btn">Agiza WhatsApp 💬</a>
+                </div>
+            `).join('');
         }
-        load();
+        init();
     </script>
 </body>
 </html>
