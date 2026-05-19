@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EDMAR ADMIN - Panel</title>
+    <title>EDMAR ADMIN - MongoDB Panel</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f4f6f9; margin: 0; padding: 20px; color: #333; }
         .container { max-width: 700px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
@@ -22,74 +22,72 @@
 <body>
 
 <div class="container">
-    <h2>EDMAR SHOES - Dashboard 🔧</h2>
+    <h2>EDMAR SHOES - Dashboard (Mawingu Cloud ☁️)</h2>
+    <p style="color: #666; font-size: 0.9rem;">Data zote hapa zinasaveka MongoDB Atlas. Hazitafutika kamwe!</p>
     
-    <form id="uploadForm">
-        <div class="form-group">
-            <label>Jina la Kiatu:</label>
-            <input type="text" name="name" id="pName" placeholder="Mfano: Jordan 4 Kali" required>
-        </div>
-        
-        <div class="form-group">
-            <label>Bei ya Kiatu (Tsh):</label>
-            <input type="text" name="price" id="pPrice" placeholder="Mfano: 55,000">
-        </div>
-        
-        <div class="form-group">
-            <label>Maelezo Mafupi (Description):</label>
-            <textarea name="description" id="pDesc" rows="2" placeholder="Sifa za kiatu hiki..."></textarea>
-        </div>
-        
-        <div class="form-group">
-            <label>Chagua Picha ya Kiatu (Kutoka Kwenye Faili):</label>
-            <input type="file" name="image" id="pImage" accept="image/*" required>
-        </div>
-        
-        <button type="submit">Pandisha Bidhaa Mpya Moja kwa Moja 🚀</button>
-    </form>
+    <div class="form-group">
+        <label>Jina la Kiatu:</label>
+        <input type="text" id="pName" placeholder="Mfano: Nike Airforce 1">
+    </div>
+    
+    <div class="form-group">
+        <label>Bei ya Kiatu (Tsh):</label>
+        <input type="text" id="pPrice" placeholder="Mfano: 45,000">
+    </div>
+    
+    <div class="form-group">
+        <label>Maelezo Mafupi (Description):</label>
+        <textarea id="pDesc" rows="2" placeholder="Sifa za kiatu hiki..."></textarea>
+    </div>
+    
+    <div class="form-group">
+        <label>Direct Link ya Picha kutoka Postimages:</label>
+        <input type="text" id="pUrl" placeholder="https://i.postimg.cc/...">
+    </div>
+    
+    <button type="button" onclick="pandishaMzigo()">Hifadhi Kiatu Permanent 🚀</button>
 
     <div class="product-list">
-        <h3>Viatu Vilivyopo Dukani</h3>
-        <div id="orodhaKuu">Inapakia viatu...</div>
+        <h3>Viatu Vilivyopo Kwenye Database</h3>
+        <div id="orodhaKuu">Inapakia kutoka MongoDB...</div>
     </div>
 </div>
 
 <script>
-    const form = document.getElementById('uploadForm');
-
-    form.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        
+    async function pandishaMzigo() {
         const name = document.getElementById('pName').value.trim();
-        const fileInput = document.getElementById('pImage');
+        const price = document.getElementById('pPrice').value.trim();
+        const description = document.getElementById('pDesc').value.trim();
+        const imageUrl = document.getElementById('pUrl').value.trim();
 
-        if (!name || fileInput.files.length === 0) {
-            alert('Tafadhali jaza Jina la kiatu na Uchague Picha!');
+        if (!name || !imageUrl) {
+            alert('Tafadhali jaza Jina la kiatu na u-paste Link ya Picha ya Postimages!');
             return;
         }
-
-        // Tunatumia FormData kama ulivyokuwa unatumia mwanzo kufanikisha picha kupanda
-        const formData = new FormData(form);
 
         try {
             const response = await fetch('/api/products', {
                 method: 'POST',
-                body: formData
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, price, description, imageUrl })
             });
 
             const data = await response.json();
 
             if (response.ok && data.success) {
-                alert('Hongera sana kaka! Mzigo mpya wa kiatu umepanda kwenye duka lako! 🎉');
-                form.reset();
+                alert('Hongera sana kaka! Mzigo umehifadhiwa MongoDB salama! 🔒✨');
+                document.getElementById('pName').value = '';
+                document.getElementById('pPrice').value = '';
+                document.getElementById('pDesc').value = '';
+                document.getElementById('pUrl').value = '';
                 pakiaViatuVyetu();
             } else {
-                alert('Server imegoma: ' + (data.error || 'Shida haijulikani'));
+                alert('MongoDB Imekataa: ' + (data.error || 'Shida haijulikani'));
             }
         } catch (error) {
-            alert('Kosa la Mawasiliano: Kushindwa kabisa kufika kwenye server!');
+            alert('Kosa la Mawasiliano: Kushindwa kufika kwenye server!');
         }
-    });
+    }
 
     async function pakiaViatuVyetu() {
         try {
@@ -98,30 +96,30 @@
             const div = document.getElementById('orodhaKuu');
             
             if(viatu.length === 0) {
-                div.innerHTML = '<p style="color:#999">Bado duka lipo tupu. Pandisha viatu juu!</p>';
+                div.innerHTML = '<p style="color:#999">Bado duka lipo tupu kule MongoDB.</p>';
                 return;
             }
 
             div.innerHTML = viatu.map(v => `
                 <div class="item-row">
-                    <img src="${v.imageUrl}">
+                    <img src="${v.imageUrl}" onerror="this.src='https://via.placeholder.com/60'">
                     <div>
                         <strong>${v.name}</strong><br>
                         <small style="color:#777">Tsh ${v.price}/=</small>
                     </div>
-                    <button class="del-btn" onclick="futaKiatu('${v.id}')">Futa</button>
+                    <button class="del-btn" onclick="futaKiatu('${v._id}')">Futa</button>
                 </div>
             `).join('');
         } catch(e) {
-            document.getElementById('orodhaKuu').innerText = 'Imefeli kupakia orodha.';
+            document.getElementById('orodhaKuu').innerText = 'Imefeli kupakia kutoka MongoDB.';
         }
     }
 
     async function futaKiatu(id) {
-        if (confirm('Je, una uhakika unataka kufuta kabisa kiatu hiki dukani?')) {
+        if (confirm('Je, unataka kufuta kabisa kiatu hiki kule MongoDB?')) {
             const res = await fetch('/api/products/' + id, { method: 'DELETE' });
             if(res.ok) {
-                alert('Kiatu kimefutwa!');
+                alert('Kimefutwa kwenye Database!');
                 pakiaViatuVyetu();
             }
         }
